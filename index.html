@@ -1,0 +1,3619 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LUMIÈRE — Alta Cosmética Botânica & Perfumaria</title>
+  <meta name="description" content="LUMIÈRE — Alta cosmética botânica em vidro líquido. Skincare de precisão, perfumaria de autor e rituais exclusivos." />
+
+  <!-- Google Fonts: Cormorant Garamond (Editorial Luxury) + Plus Jakarta Sans (Clean Modern UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- GSAP 3 for fluid editorial motion -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <!-- VanillaTilt for tactile 3D glass depth -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+  <!-- Canvas Confetti for golden checkout shimmer -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <style>
+    /* ==========================================================================
+       LUMIÈRE — LIQUID GLASS LUXURY DESIGN SYSTEM
+       ========================================================================== */
+    :root {
+      --bg-base: #0c0809;
+      --bg-elevated: #140e10;
+      --text-primary: #fbf6f1;
+      --text-secondary: #cbb9ac;
+      --text-muted: #8f7c71;
+      --gold: #e7c28e;
+      --gold-bright: #f6ddb6;
+      --rose: #df9c92;
+      --amber: #c6844f;
+      --plum: #4d1e32;
+
+      /* Liquid Glass Tokens */
+      --glass-bg: linear-gradient(135deg, rgba(255, 249, 243, 0.085) 0%, rgba(255, 242, 232, 0.03) 100%);
+      --glass-bg-strong: linear-gradient(135deg, rgba(255, 249, 243, 0.13) 0%, rgba(255, 240, 228, 0.045) 100%);
+      --glass-bg-dark: linear-gradient(145deg, rgba(22, 15, 17, 0.72) 0%, rgba(14, 9, 11, 0.82) 100%);
+      --glass-border: rgba(255, 238, 224, 0.16);
+      --glass-border-strong: rgba(246, 221, 182, 0.34);
+      --glass-highlight: inset 0 1px 0 rgba(255, 250, 245, 0.28), inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+      --glass-shadow: 0 24px 64px -16px rgba(0, 0, 0, 0.65), 0 8px 24px -8px rgba(0, 0, 0, 0.45);
+      --blur-md: blur(22px) saturate(175%);
+      --blur-lg: blur(34px) saturate(190%);
+
+      --radius-sm: 14px;
+      --radius-md: 22px;
+      --radius-lg: 30px;
+      --radius-pill: 999px;
+
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --container: 1260px;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      background: var(--bg-base);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button, input, select {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* ==========================================================================
+       ANIMATED LIQUID AMBIENT MESH (REFRACTED BY EVERY GLASS SURFACE)
+       ========================================================================== */
+    .ambient-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(231, 194, 142, 0.14), transparent 60%),
+        radial-gradient(ellipse 70% 55% at 90% 25%, rgba(223, 156, 146, 0.13), transparent 60%),
+        radial-gradient(ellipse 65% 65% at 10% 80%, rgba(92, 34, 58, 0.24), transparent 62%),
+        #0c0809;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(110px);
+      opacity: 0.42;
+      will-change: transform;
+      animation: floatOrb 22s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 560px;
+      height: 560px;
+      top: -120px;
+      right: -80px;
+      background: radial-gradient(circle, #e7c28e 0%, rgba(223, 156, 146, 0.4) 55%, transparent 75%);
+    }
+
+    .orb-2 {
+      width: 620px;
+      height: 620px;
+      bottom: -160px;
+      left: -140px;
+      background: radial-gradient(circle, #9a475e 0%, rgba(198, 132, 79, 0.35) 55%, transparent 75%);
+      animation-duration: 28s;
+      animation-delay: -6s;
+    }
+
+    .orb-3 {
+      width: 440px;
+      height: 440px;
+      top: 42%;
+      left: 44%;
+      background: radial-gradient(circle, rgba(231, 194, 142, 0.55) 0%, rgba(223, 156, 146, 0.2) 50%, transparent 72%);
+      opacity: 0.24;
+      animation-duration: 32s;
+      animation-delay: -12s;
+    }
+
+    @keyframes floatOrb {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      50%  { transform: translate3d(55px, -40px, 0) scale(1.1); }
+      100% { transform: translate3d(-45px, 50px, 0) scale(0.95); }
+    }
+
+    /* Ultra-subtle film grain for tactile luxury finish */
+    .grain-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.032;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ==========================================================================
+       LIQUID GLASS SURFACES & SPECULAR INTERACTION
+       ========================================================================== */
+    .glass {
+      position: relative;
+      background: var(--glass-bg);
+      backdrop-filter: var(--blur-md);
+      -webkit-backdrop-filter: var(--blur-md);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-highlight), var(--glass-shadow);
+    }
+
+    .glass-strong {
+      position: relative;
+      background: var(--glass-bg-strong);
+      backdrop-filter: var(--blur-lg);
+      -webkit-backdrop-filter: var(--blur-lg);
+      border: 1px solid var(--glass-border-strong);
+      box-shadow: var(--glass-highlight), var(--glass-shadow);
+    }
+
+    /* Cursor-tracking liquid specular highlight */
+    .specular {
+      overflow: hidden;
+    }
+
+    .specular::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        460px circle at var(--mx, 50%) var(--my, 50%),
+        rgba(255, 240, 220, 0.16),
+        rgba(231, 194, 142, 0.05) 35%,
+        transparent 68%
+      );
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .specular:hover::before {
+      opacity: 1;
+    }
+
+    /* ==========================================================================
+       LAYOUT UTILITIES & TYPOGRAPHY
+       ========================================================================== */
+    .app-shell {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    .serif {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      letter-spacing: -0.015em;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold-bright);
+      background: rgba(231, 194, 142, 0.1);
+      border: 1px solid rgba(231, 194, 142, 0.28);
+      backdrop-filter: blur(14px);
+    }
+
+    .eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--gold-bright);
+      box-shadow: 0 0 12px var(--gold);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 42px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: clamp(2.2rem, 4.2vw, 3.5rem);
+      line-height: 1.04;
+      font-weight: 400;
+      margin-top: 14px;
+    }
+
+    .section-title em {
+      font-style: italic;
+      background: linear-gradient(120deg, var(--gold-bright), var(--rose));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-desc {
+      max-width: 440px;
+      color: var(--text-secondary);
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: var(--radius-pill);
+      font-size: 0.86rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease), border-color 0.35s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f3d7ad 0%, #dca973 50%, #d48e82 100%);
+      color: #191011;
+      box-shadow: 0 10px 30px -6px rgba(231, 194, 142, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 18px 38px -6px rgba(231, 194, 142, 0.58), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+    }
+
+    .btn-glass {
+      background: rgba(255, 248, 240, 0.08);
+      border: 1px solid rgba(255, 238, 224, 0.22);
+      backdrop-filter: blur(18px);
+      color: var(--text-primary);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 248, 240, 0.15);
+      border-color: rgba(246, 221, 182, 0.42);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 0.8rem;
+    }
+
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 248, 240, 0.07);
+      border: 1px solid rgba(255, 238, 224, 0.16);
+      backdrop-filter: blur(16px);
+      color: var(--text-primary);
+      transition: all 0.3s var(--ease);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: rgba(231, 194, 142, 0.18);
+      border-color: var(--glass-border-strong);
+      transform: translateY(-1px);
+    }
+
+    .icon-btn.wish-active {
+      color: #f38f8f;
+      background: rgba(243, 143, 143, 0.18);
+      border-color: rgba(243, 143, 143, 0.45);
+    }
+
+    /* ==========================================================================
+       FLOATING LIQUID-GLASS NAVIGATION HEADER
+       ========================================================================== */
+    .header-wrap {
+      position: fixed;
+      top: 18px;
+      left: 0;
+      right: 0;
+      z-index: 80;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .navbar {
+      pointer-events: auto;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 10px 14px 10px 24px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: linear-gradient(135deg, rgba(24, 16, 18, 0.72), rgba(16, 11, 13, 0.56));
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 238, 224, 0.18);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 250, 245, 0.25),
+        0 20px 50px -12px rgba(0, 0, 0, 0.7);
+      transition: padding 0.35s var(--ease), background 0.35s var(--ease);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(246, 221, 182, 0.28), rgba(223, 156, 146, 0.14));
+      border: 1px solid rgba(246, 221, 182, 0.45);
+      display: grid;
+      place-items: center;
+      box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.35), 0 0 20px rgba(231, 194, 142, 0.22);
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      letter-spacing: 0.16em;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .brand-sub {
+      display: block;
+      font-size: 0.6rem;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 2px;
+    }
+
+    /* 4-Page Liquid Glass Navigation Tabs */
+    .nav-pills {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 248, 240, 0.05);
+      border: 1px solid rgba(255, 238, 224, 0.1);
+      position: relative;
+    }
+
+    .nav-link {
+      position: relative;
+      z-index: 2;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color 0.3s var(--ease), background 0.3s var(--ease);
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+
+    .nav-link .page-num {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--gold);
+      opacity: 0.7;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+    }
+
+    .nav-link.active {
+      color: #160e0f;
+      font-weight: 600;
+      background: linear-gradient(135deg, #f6ddb6 0%, #e4b783 55%, #de9c91 100%);
+      box-shadow: 0 6px 20px -4px rgba(231, 194, 142, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+    }
+
+    .nav-link.active .page-num {
+      color: #3d2417;
+      opacity: 1;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f6ddb6, #df9c92);
+      color: #170e0f;
+      font-size: 0.68rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.45);
+      transition: transform 0.3s var(--ease);
+    }
+
+    .badge-count.bump {
+      transform: scale(1.3);
+    }
+
+    .mobile-menu-btn {
+      display: none;
+    }
+
+    /* Mobile glass nav strip */
+    .mobile-nav-drawer {
+      display: none;
+      position: fixed;
+      top: 84px;
+      left: 16px;
+      right: 16px;
+      z-index: 79;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      background: rgba(18, 12, 14, 0.92);
+      backdrop-filter: blur(28px);
+      border: 1px solid var(--glass-border-strong);
+      box-shadow: var(--glass-shadow);
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .mobile-nav-drawer.open {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       4-PAGE SPA VIEW SYSTEM
+       ========================================================================== */
+    main {
+      flex: 1;
+      padding-top: 104px;
+    }
+
+    .page-view {
+      display: none;
+      opacity: 0;
+    }
+
+    .page-view.active {
+      display: block;
+      opacity: 1;
+    }
+
+    section {
+      padding: 72px 0;
+    }
+
+    /* ==========================================================================
+       PAGE 1: LANDING HERO & SHOWCASE
+       ========================================================================== */
+    .hero {
+      padding: 36px 0 64px;
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 5.8vw, 5.2rem);
+      line-height: 0.96;
+      font-weight: 400;
+      margin: 22px 0 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(125deg, #fff4e4 0%, #f1cc99 45%, #e29e93 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.04rem;
+      color: var(--text-secondary);
+      max-width: 500px;
+      line-height: 1.75;
+      margin-bottom: 34px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 42px;
+    }
+
+    .hero-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 520px;
+    }
+
+    .metric-pill {
+      padding: 15px 16px;
+      border-radius: var(--radius-sm);
+    }
+
+    .metric-value {
+      font-family: var(--font-serif);
+      font-size: 1.7rem;
+      line-height: 1;
+      color: var(--gold-bright);
+    }
+
+    .metric-label {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-top: 5px;
+      line-height: 1.3;
+    }
+
+    /* Right Hero: Layered Liquid Glass Visual Stage */
+    .hero-stage {
+      position: relative;
+      padding: 16px;
+    }
+
+    .hero-glass-frame {
+      position: relative;
+      border-radius: 34px;
+      padding: 14px;
+      background: linear-gradient(145deg, rgba(255, 248, 240, 0.14), rgba(255, 236, 222, 0.04));
+      border: 1px solid rgba(255, 240, 226, 0.25);
+      backdrop-filter: blur(24px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.35),
+        0 40px 90px -20px rgba(0, 0, 0, 0.78),
+        0 0 80px -20px rgba(231, 194, 142, 0.24);
+      transform-style: preserve-3d;
+    }
+
+    .hero-image-box {
+      border-radius: 24px;
+      overflow: hidden;
+      aspect-ratio: 4 / 4.4;
+      position: relative;
+    }
+
+    .hero-image-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 1.2s var(--ease);
+    }
+
+    .hero-glass-frame:hover .hero-image-box img {
+      transform: scale(1.04);
+    }
+
+    .hero-image-box::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(12, 8, 9, 0.04) 40%, rgba(12, 8, 9, 0.58) 100%);
+      pointer-events: none;
+    }
+
+    .float-glass-top {
+      position: absolute;
+      top: 32px;
+      left: -24px;
+      z-index: 5;
+      padding: 13px 18px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 250px;
+      background: rgba(20, 13, 15, 0.62);
+      backdrop-filter: blur(26px) saturate(185%);
+      border: 1px solid rgba(255, 240, 224, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 20px 44px rgba(0, 0, 0, 0.55);
+      animation: floatGentle 6s ease-in-out infinite;
+    }
+
+    .float-glass-bottom {
+      position: absolute;
+      bottom: 26px;
+      right: -18px;
+      left: 26px;
+      z-index: 5;
+      padding: 16px 20px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(20, 13, 15, 0.68);
+      backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(246, 221, 182, 0.3);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 24px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    @keyframes floatGentle {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    /* Glass Marquee */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid rgba(255, 238, 224, 0.1);
+      border-bottom: 1px solid rgba(255, 238, 224, 0.1);
+      background: rgba(255, 248, 240, 0.03);
+      backdrop-filter: blur(16px);
+      padding: 15px 0;
+      margin: 24px 0 10px;
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 44px;
+      width: max-content;
+      animation: marquee 32s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      white-space: nowrap;
+    }
+
+    .marquee-item span.star {
+      color: var(--gold);
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Bento Showcase to the Other Sales Pages */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr;
+      gap: 22px;
+    }
+
+    .bento-card {
+      position: relative;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      min-height: 390px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px;
+      cursor: pointer;
+      transition: transform 0.5s var(--ease), border-color 0.4s var(--ease);
+    }
+
+    .bento-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--glass-border-strong);
+    }
+
+    .bento-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.9s var(--ease);
+      z-index: 0;
+    }
+
+    .bento-card:hover .bento-bg {
+      transform: scale(1.07);
+    }
+
+    .bento-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(12, 8, 9, 0.1) 15%, rgba(12, 8, 9, 0.88) 100%);
+      z-index: 1;
+    }
+
+    .bento-content {
+      position: relative;
+      z-index: 3;
+    }
+
+    .bento-tag {
+      display: inline-block;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 0.68rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: rgba(255, 248, 240, 0.12);
+      border: 1px solid rgba(255, 248, 240, 0.24);
+      backdrop-filter: blur(12px);
+      color: var(--gold-bright);
+      margin-bottom: 12px;
+    }
+
+    .bento-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .bento-text {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      margin-bottom: 18px;
+    }
+
+    .bento-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--gold-bright);
+    }
+
+    /* ==========================================================================
+       PRODUCT CARDS (GLASSMORPHISM E-COMMERCE)
+       ========================================================================== */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .product-grid-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .product-card {
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.45s var(--ease), border-color 0.4s var(--ease), box-shadow 0.45s var(--ease);
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--glass-border-strong);
+      box-shadow: var(--glass-highlight), 0 32px 72px -18px rgba(0, 0, 0, 0.78), 0 0 36px -12px rgba(231, 194, 142, 0.22);
+    }
+
+    .product-media {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4 / 4.4;
+      margin-bottom: 16px;
+      background: #1a1214;
+    }
+
+    .product-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s var(--ease);
+    }
+
+    .product-card:hover .product-media img {
+      transform: scale(1.06);
+    }
+
+    .product-badges {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 3;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .prod-badge {
+      padding: 5px 11px;
+      border-radius: var(--radius-pill);
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: rgba(16, 10, 12, 0.66);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 240, 224, 0.22);
+      color: var(--gold-bright);
+    }
+
+    .prod-badge.sale {
+      background: linear-gradient(135deg, rgba(223, 156, 146, 0.9), rgba(231, 194, 142, 0.9));
+      color: #1a0f10;
+      border: none;
+    }
+
+    .product-quick-actions {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .quick-view-bar {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 12px;
+      z-index: 3;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(18, 12, 14, 0.72);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 240, 224, 0.22);
+      color: var(--text-primary);
+      font-size: 0.76rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.35s var(--ease);
+    }
+
+    .product-card:hover .quick-view-bar {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .product-body {
+      padding: 4px 6px 8px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .product-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--gold-bright);
+      font-weight: 600;
+    }
+
+    .product-title {
+      font-family: var(--font-serif);
+      font-size: 1.48rem;
+      line-height: 1.12;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+    }
+
+    .product-sub {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+      flex: 1;
+    }
+
+    /* Size selector pills (for Perfumes) */
+    .size-pills {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .size-pill {
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      background: rgba(255, 248, 240, 0.06);
+      border: 1px solid rgba(255, 238, 224, 0.14);
+      color: var(--text-secondary);
+      transition: all 0.25s var(--ease);
+    }
+
+    .size-pill.active {
+      background: rgba(231, 194, 142, 0.2);
+      border-color: var(--gold);
+      color: var(--gold-bright);
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255, 238, 224, 0.1);
+    }
+
+    .price-wrap {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price {
+      font-family: var(--font-serif);
+      font-size: 1.55rem;
+      font-weight: 600;
+      color: var(--gold-bright);
+    }
+
+    .price-old {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    /* ==========================================================================
+       INTERACTIVE BOTANICAL ALCHEMY (PAGE 1)
+       ========================================================================== */
+    .alchemy-box {
+      border-radius: var(--radius-lg);
+      padding: 38px;
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .alchemy-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .alchemy-tab {
+      text-align: left;
+      padding: 18px 22px;
+      border-radius: 18px;
+      background: rgba(255, 248, 240, 0.04);
+      border: 1px solid rgba(255, 238, 224, 0.1);
+      transition: all 0.35s var(--ease);
+    }
+
+    .alchemy-tab:hover {
+      background: rgba(255, 248, 240, 0.08);
+    }
+
+    .alchemy-tab.active {
+      background: linear-gradient(135deg, rgba(231, 194, 142, 0.16), rgba(223, 156, 146, 0.09));
+      border-color: rgba(246, 221, 182, 0.42);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    }
+
+    .alchemy-tab h4 {
+      font-family: var(--font-serif);
+      font-size: 1.45rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .alchemy-tab p {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .alchemy-panel {
+      border-radius: 24px;
+      padding: 32px;
+      min-height: 310px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .stat-bars {
+      display: grid;
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .stat-bar-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .stat-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(255, 248, 240, 0.09);
+      overflow: hidden;
+    }
+
+    .stat-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--gold), var(--rose));
+      transition: width 0.7s var(--ease);
+    }
+
+    /* Reviews */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .review-card {
+      padding: 28px;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .review-quote {
+      font-family: var(--font-serif);
+      font-size: 1.32rem;
+      line-height: 1.45;
+      color: var(--text-primary);
+    }
+
+    .review-author {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 238, 224, 0.1);
+    }
+
+    /* ==========================================================================
+       PAGE HEADERS (PAGES 2, 3, 4) & FILTER CONTROLS
+       ========================================================================== */
+    .page-banner {
+      border-radius: 34px;
+      padding: 48px 44px;
+      margin-bottom: 44px;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .page-banner-img {
+      border-radius: 22px;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      border: 1px solid rgba(255, 240, 226, 0.22);
+      box-shadow: 0 24px 54px rgba(0, 0, 0, 0.55);
+    }
+
+    .page-banner-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .filter-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      margin-bottom: 32px;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(255, 248, 240, 0.05);
+      border: 1px solid rgba(255, 238, 224, 0.12);
+      transition: all 0.25s var(--ease);
+    }
+
+    .filter-pill:hover {
+      color: var(--text-primary);
+      border-color: rgba(246, 221, 182, 0.35);
+    }
+
+    .filter-pill.active {
+      background: linear-gradient(135deg, #f3d7ad, #df9c92);
+      color: #180f10;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .sort-select {
+      padding: 9px 16px;
+      border-radius: var(--radius-pill);
+      background: rgba(22, 15, 17, 0.8);
+      border: 1px solid rgba(255, 238, 224, 0.18);
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    /* ==========================================================================
+       PAGE 3: INTERACTIVE OLFACTORY PYRAMID & ENGRAVING STUDIO
+       ========================================================================== */
+    .scent-studio {
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin-bottom: 52px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .scent-selector {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 20px 0 26px;
+    }
+
+    .pyramid-layers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .pyramid-layer {
+      padding: 15px 20px;
+      border-radius: 16px;
+      background: rgba(255, 248, 240, 0.055);
+      border: 1px solid rgba(255, 238, 224, 0.14);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .pyramid-layer span {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--gold);
+    }
+
+    .pyramid-layer strong {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .engraving-box {
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      margin-top: 52px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .engraving-preview {
+      position: relative;
+      border-radius: 22px;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      border: 1px solid rgba(246, 221, 182, 0.3);
+    }
+
+    .engraving-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.75);
+    }
+
+    .engraving-plate {
+      position: absolute;
+      left: 50%;
+      top: 52%;
+      transform: translate(-50%, -50%);
+      padding: 12px 28px;
+      border-radius: 14px;
+      background: rgba(20, 14, 15, 0.45);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(246, 221, 182, 0.55);
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.7rem;
+      letter-spacing: 0.14em;
+      color: var(--gold-bright);
+      text-shadow: 0 2px 14px rgba(231, 194, 142, 0.5);
+      min-width: 190px;
+      text-align: center;
+    }
+
+    .glass-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 248, 240, 0.07);
+      border: 1px solid rgba(255, 238, 224, 0.2);
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+    }
+
+    .glass-input:focus {
+      border-color: var(--gold);
+      background: rgba(255, 248, 240, 0.11);
+    }
+
+    /* ==========================================================================
+       PAGE 4: KITS, DIAGNOSTIC QUIZ & CONCIERGE
+       ========================================================================== */
+    .kits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 26px;
+      margin-bottom: 60px;
+    }
+
+    .kit-card {
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 22px;
+      align-items: center;
+      transition: transform 0.45s var(--ease), border-color 0.4s var(--ease);
+    }
+
+    .kit-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--glass-border-strong);
+    }
+
+    .kit-img {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 1 / 1;
+      position: relative;
+    }
+
+    .kit-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.8s var(--ease);
+    }
+
+    .kit-card:hover .kit-img img {
+      transform: scale(1.06);
+    }
+
+    .kit-list {
+      list-style: none;
+      margin: 12px 0 18px;
+      display: grid;
+      gap: 6px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .kit-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quiz-card {
+      border-radius: 34px;
+      padding: 44px;
+      margin-bottom: 54px;
+    }
+
+    .quiz-options {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .quiz-opt {
+      padding: 20px 18px;
+      border-radius: 18px;
+      text-align: left;
+      background: rgba(255, 248, 240, 0.05);
+      border: 1px solid rgba(255, 238, 224, 0.14);
+      transition: all 0.3s var(--ease);
+    }
+
+    .quiz-opt:hover {
+      background: rgba(255, 248, 240, 0.1);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+
+    .quiz-opt.selected {
+      background: linear-gradient(135deg, rgba(231, 194, 142, 0.22), rgba(223, 156, 146, 0.12));
+      border-color: var(--gold-bright);
+    }
+
+    .quiz-result-box {
+      margin-top: 26px;
+      padding: 24px 28px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    /* VIP Banner */
+    .vip-banner {
+      border-radius: 34px;
+      padding: 46px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(231, 194, 142, 0.14), rgba(223, 156, 146, 0.08), rgba(255, 248, 240, 0.04));
+    }
+
+    .vip-form {
+      max-width: 500px;
+      margin: 24px auto 0;
+      display: flex;
+      gap: 10px;
+    }
+
+    /* ==========================================================================
+       DRAWERS & MODALS (CART, WISHLIST, QUICK VIEW, CHECKOUT)
+       ========================================================================== */
+    .overlay-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(7, 4, 5, 0.68);
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s var(--ease);
+    }
+
+    .overlay-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      bottom: 16px;
+      width: min(440px, calc(100vw - 32px));
+      z-index: 130;
+      border-radius: 28px;
+      background: linear-gradient(155deg, rgba(26, 18, 20, 0.88), rgba(13, 9, 10, 0.94));
+      backdrop-filter: blur(36px) saturate(190%);
+      border: 1px solid rgba(246, 221, 182, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), -20px 0 60px rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(115%);
+      transition: transform 0.45s var(--ease);
+      overflow: hidden;
+    }
+
+    .drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-head {
+      padding: 22px 24px;
+      border-bottom: 1px solid rgba(255, 238, 224, 0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .drawer-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .drawer-foot {
+      padding: 20px 24px 24px;
+      border-top: 1px solid rgba(255, 238, 224, 0.12);
+      background: rgba(255, 248, 240, 0.03);
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 72px 1fr;
+      gap: 14px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255, 248, 240, 0.05);
+      border: 1px solid rgba(255, 238, 224, 0.1);
+    }
+
+    .cart-item img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(255, 248, 240, 0.07);
+      border: 1px solid rgba(255, 238, 224, 0.14);
+      font-size: 0.82rem;
+    }
+
+    /* Glass Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.35s var(--ease);
+    }
+
+    .modal.open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .modal-card {
+      width: min(860px, 100%);
+      max-height: 90vh;
+      overflow-y: auto;
+      border-radius: 30px;
+      background: linear-gradient(150deg, rgba(28, 19, 21, 0.9), rgba(14, 9, 11, 0.95));
+      backdrop-filter: blur(36px) saturate(190%);
+      border: 1px solid rgba(246, 221, 182, 0.28);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 40px 90px rgba(0, 0, 0, 0.8);
+      transform: scale(0.94) translateY(14px);
+      transition: transform 0.4s var(--ease);
+      position: relative;
+    }
+
+    .modal.open .modal-card {
+      transform: scale(1) translateY(0);
+    }
+
+    .quickview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 32px;
+      padding: 32px;
+      align-items: center;
+    }
+
+    /* Toast */
+    .toast-stack {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 160;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 13px 22px;
+      border-radius: var(--radius-pill);
+      background: rgba(24, 16, 18, 0.86);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(246, 221, 182, 0.36);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+      color: var(--text-primary);
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.4s var(--ease) forwards;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(16px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ==========================================================================
+       FOOTER
+       ========================================================================== */
+    footer {
+      margin-top: 40px;
+      border-top: 1px solid rgba(255, 238, 224, 0.12);
+      background: rgba(16, 10, 12, 0.58);
+      backdrop-filter: blur(24px);
+      padding: 58px 0 34px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 36px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h5 {
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .footer-col ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+    }
+
+    .footer-col ul button,
+    .footer-col ul a {
+      color: var(--text-secondary);
+      transition: color 0.25s;
+    }
+
+    .footer-col ul button:hover,
+    .footer-col ul a:hover {
+      color: var(--gold-bright);
+    }
+
+    .footer-bottom {
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 238, 224, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ==========================================================================
+       RESPONSIVE BREAKPOINTS
+       ========================================================================== */
+    @media (max-width: 1100px) {
+      .hero-grid,
+      .alchemy-box,
+      .page-banner,
+      .scent-studio,
+      .engraving-box,
+      .quickview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-grid,
+      .product-grid,
+      .product-grid-4,
+      .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .kits-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quiz-options {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 820px) {
+      .nav-pills {
+        display: none;
+      }
+
+      .mobile-menu-btn {
+        display: inline-flex;
+      }
+
+      .float-glass-top {
+        left: 12px;
+        top: 16px;
+      }
+
+      .float-glass-bottom {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 0 18px;
+      }
+
+      .bento-grid,
+      .product-grid,
+      .product-grid-4,
+      .reviews-grid,
+      .kit-card,
+      .quiz-options,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-metrics {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .page-banner,
+      .alchemy-box,
+      .scent-studio,
+      .engraving-box,
+      .quiz-card,
+      .vip-banner {
+        padding: 26px 22px;
+      }
+
+      .vip-form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated Liquid Light Orbs (Refracted through all frosted glass cards) -->
+  <div class="ambient-canvas" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <div class="app-shell">
+
+    <!-- ======================================================================
+         FLOATING LIQUID-GLASS NAVIGATION (4 PÁGINAS DE VENDA)
+         ====================================================================== -->
+    <header class="header-wrap">
+      <nav class="navbar" aria-label="Navegação Principal">
+        <div class="brand" onclick="navigateTo('inicio')" role="button" tabindex="0">
+          <div class="brand-mark">
+            <i data-lucide="sparkles" style="width:17px;height:17px;color:#f6ddb6;"></i>
+          </div>
+          <div>
+            <span class="brand-name">LUMIÈRE</span>
+            <span class="brand-sub">Maison Botânica · Lisboa</span>
+          </div>
+        </div>
+
+        <div class="nav-pills" role="tablist" aria-label="Páginas de Venda">
+          <button class="nav-link active" data-page="inicio" onclick="navigateTo('inicio')">
+            <span class="page-num">01</span> Início
+          </button>
+          <button class="nav-link" data-page="skincare" onclick="navigateTo('skincare')">
+            <span class="page-num">02</span> Skincare
+          </button>
+          <button class="nav-link" data-page="perfumaria" onclick="navigateTo('perfumaria')">
+            <span class="page-num">03</span> Perfumaria & Corpo
+          </button>
+          <button class="nav-link" data-page="kits" onclick="navigateTo('kits')">
+            <span class="page-num">04</span> Rituais & Kits
+          </button>
+        </div>
+
+        <div class="nav-actions">
+          <button class="icon-btn" onclick="openWishlist()" title="Favoritos" aria-label="Abrir favoritos">
+            <i data-lucide="heart" style="width:18px;height:18px;"></i>
+            <span class="badge-count" id="wishBadge">0</span>
+          </button>
+          <button class="icon-btn" onclick="openCart()" title="Cesto de Compras" aria-label="Abrir cesto de compras">
+            <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i>
+            <span class="badge-count" id="cartBadge">0</span>
+          </button>
+          <button class="icon-btn mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+            <i data-lucide="menu" style="width:18px;height:18px;"></i>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mobile Glass Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNav">
+      <button class="nav-link active" data-page="inicio" onclick="navigateTo('inicio'); toggleMobileMenu(false);">
+        <span class="page-num">01</span> Início — Landing Flagship
+      </button>
+      <button class="nav-link" data-page="skincare" onclick="navigateTo('skincare'); toggleMobileMenu(false);">
+        <span class="page-num">02</span> Skincare — Cuidados de Rosto
+      </button>
+      <button class="nav-link" data-page="perfumaria" onclick="navigateTo('perfumaria'); toggleMobileMenu(false);">
+        <span class="page-num">03</span> Perfumaria & Corpo
+      </button>
+      <button class="nav-link" data-page="kits" onclick="navigateTo('kits'); toggleMobileMenu(false);">
+        <span class="page-num">04</span> Rituais & Kits Exclusivos
+      </button>
+    </div>
+
+    <main>
+      <!-- ====================================================================
+           PÁGINA 1: INÍCIO (LANDING PAGE FLAGSHIP)
+           ==================================================================== -->
+      <div class="page-view active" id="page-inicio">
+        <section class="hero">
+          <div class="container">
+            <div class="hero-grid">
+              <div class="hero-copy">
+                <span class="eyebrow"><span class="dot"></span> Coleção Cristal 2026 · Edição Lisboa</span>
+                <h1 class="hero-title">
+                  A Luz do <em>Vidro Líquido</em> na Tua Pele.
+                </h1>
+                <p class="hero-subtitle">
+                  Alta cosmética botânica formulada a frio em frascos de cristal recarregáveis.
+                  Séruns luminosos, perfumaria de autor e rituais sensoriais que revelam o brilho natural da pele.
+                </p>
+                <div class="hero-cta-row">
+                  <button class="btn btn-primary" onclick="navigateTo('skincare')">
+                    Explorar Coleção <i data-lucide="arrow-up-right" style="width:17px;height:17px;"></i>
+                  </button>
+                  <button class="btn btn-glass" onclick="navigateTo('kits')">
+                    <i data-lucide="sparkles" style="width:16px;height:16px;color:var(--gold-bright);"></i>
+                    Fazer Diagnóstico de Pele
+                  </button>
+                </div>
+
+                <div class="hero-metrics">
+                  <div class="glass specular metric-pill">
+                    <div class="metric-value">99.4%</div>
+                    <div class="metric-label">Ingredientes de origem botânica pura</div>
+                  </div>
+                  <div class="glass specular metric-pill">
+                    <div class="metric-value">4.9 ★</div>
+                    <div class="metric-label">Mais de 12.800 avaliações verificadas</div>
+                  </div>
+                  <div class="glass specular metric-pill">
+                    <div class="metric-value">24h</div>
+                    <div class="metric-label">Entrega expressa grátis acima de €65</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3D Liquid Glass Hero Visual -->
+              <div class="hero-stage">
+                <div class="hero-glass-frame" data-tilt data-tilt-max="6" data-tilt-speed="600" data-tilt-glare data-tilt-max-glare="0.22">
+                  <div class="float-glass-top">
+                    <div style="width:38px;height:38px;border-radius:50%;background:rgba(231,194,142,0.18);border:1px solid rgba(246,221,182,0.4);display:grid;place-items:center;flex-shrink:0;">
+                      <i data-lucide="droplets" style="width:17px;height:17px;color:#f6ddb6;"></i>
+                    </div>
+                    <div>
+                      <div style="font-size:0.78rem;font-weight:600;color:#fbf6f1;">+94% Luminosidade</div>
+                      <div style="font-size:0.7rem;color:var(--text-secondary);">Resultados clínicos em 14 dias</div>
+                    </div>
+                  </div>
+
+                  <div class="hero-image-box">
+                    <img src="https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=1100&q=85" alt="Elixir Lumière 01 em frasco de cristal" />
+                  </div>
+
+                  <div class="float-glass-bottom">
+                    <div>
+                      <div style="font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);">Ícone da Maison</div>
+                      <div class="serif" style="font-size:1.35rem;line-height:1.1;">Elixir Lumière 01 · 30ml</div>
+                      <div style="font-size:0.82rem;color:var(--gold-bright);font-weight:600;margin-top:2px;">€78,00</div>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="addToCart('elixir-01')">
+                      <i data-lucide="plus" style="width:15px;height:15px;"></i> Comprar
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Liquid Glass Marquee -->
+        <div class="marquee-wrap">
+          <div class="marquee-track">
+            <span class="marquee-item"><span class="star">✦</span> Extração Botânica a Frio</span>
+            <span class="marquee-item"><span class="star">✦</span> Frascos de Cristal Recarregáveis</span>
+            <span class="marquee-item"><span class="star">✦</span> Vegan & Cruelty-Free</span>
+            <span class="marquee-item"><span class="star">✦</span> Amostras de Luxo em Todas as Encomendas</span>
+            <span class="marquee-item"><span class="star">✦</span> Dermatologicamente Testado</span>
+            <span class="marquee-item"><span class="star">✦</span> Código LUMIERE15 (-15% na 1ª Compra)</span>
+            <!-- Duplicate for seamless loop -->
+            <span class="marquee-item"><span class="star">✦</span> Extração Botânica a Frio</span>
+            <span class="marquee-item"><span class="star">✦</span> Frascos de Cristal Recarregáveis</span>
+            <span class="marquee-item"><span class="star">✦</span> Vegan & Cruelty-Free</span>
+            <span class="marquee-item"><span class="star">✦</span> Amostras de Luxo em Todas as Encomendas</span>
+            <span class="marquee-item"><span class="star">✦</span> Dermatologicamente Testado</span>
+            <span class="marquee-item"><span class="star">✦</span> Código LUMIERE15 (-15% na 1ª Compra)</span>
+          </div>
+        </div>
+
+        <!-- Bento Showcase: Navegação Direta para as Outras Páginas de Venda -->
+        <section>
+          <div class="container">
+            <div class="section-head">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> 4 Universos de Beleza</span>
+                <h2 class="section-title">Escolhe o Teu <em>Ritual</em></h2>
+              </div>
+              <p class="section-desc">
+                Explora as nossas páginas dedicadas de cuidados de rosto, perfumaria de autor e cofres exclusivos com ofertas especiais.
+              </p>
+            </div>
+
+            <div class="bento-grid">
+              <article class="glass specular bento-card" onclick="navigateTo('skincare')">
+                <img class="bento-bg" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85" alt="Skincare de Precisão" />
+                <div class="bento-content">
+                  <span class="bento-tag">Página 02 · 6 Fórmulas</span>
+                  <h3 class="bento-title">Skincare Glass-Skin</h3>
+                  <p class="bento-text">Séruns concentrados, cremes nacarados e ativos botânicos para uma pele translúcida e firme.</p>
+                  <span class="bento-link">Entrar na Boutique Skincare <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+                </div>
+              </article>
+
+              <article class="glass specular bento-card" onclick="navigateTo('perfumaria')">
+                <img class="bento-bg" src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=85" alt="Perfumaria Botânica" />
+                <div class="bento-content">
+                  <span class="bento-tag">Página 03 · Atelier Olfativo</span>
+                  <h3 class="bento-title">Perfumaria & Corpo</h3>
+                  <p class="bento-text">Eaux de Parfum de longa duração, óleos secos dourados e gravação personalizada.</p>
+                  <span class="bento-link">Descobrir Fragrâncias <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+                </div>
+              </article>
+
+              <article class="glass specular bento-card" onclick="navigateTo('kits')">
+                <img class="bento-bg" src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?auto=format&fit=crop&w=1000&q=85" alt="Rituais e Kits" />
+                <div class="bento-content">
+                  <span class="bento-tag">Página 04 · Poupe até 25%</span>
+                  <h3 class="bento-title">Rituais & Cofres</h3>
+                  <p class="bento-text">Conjuntos curados em caixas de linho, diagnóstico personalizado e ofertas de lançamento.</p>
+                  <span class="bento-link">Ver Kits Exclusivos <i data-lucide="arrow-right" style="width:16px;height:16px;"></i></span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- Bestsellers Section -->
+        <section style="padding-top: 24px;">
+          <div class="container">
+            <div class="section-head">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Mais Desejados</span>
+                <h2 class="section-title">Os <em>Bestsellers</em> da Maison</h2>
+              </div>
+              <button class="btn btn-glass" onclick="navigateTo('skincare')">
+                Ver Todos os Produtos <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+              </button>
+            </div>
+            <div class="product-grid product-grid-4" id="bestsellersGrid"></div>
+          </div>
+        </section>
+
+        <!-- Interactive Botanical Alchemy -->
+        <section>
+          <div class="container">
+            <div class="glass-strong specular alchemy-box">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Ciência & Natureza</span>
+                <h2 class="section-title" style="margin-bottom:24px;">Alquimia em <em>Cada Gota</em></h2>
+                <div class="alchemy-tabs" id="alchemyTabs">
+                  <button class="alchemy-tab active" onclick="selectAlchemy(0)">
+                    <h4>01. Camélia Branca dos Açores</h4>
+                    <p>Colhida manualmente ao amanhecer para máxima concentração antioxidante.</p>
+                  </button>
+                  <button class="alchemy-tab" onclick="selectAlchemy(1)">
+                    <h4>02. Bakuchiol Botânico 2%</h4>
+                    <p>A alternativa vegetal suave ao retinol, sem irritação nem fotossensibilidade.</p>
+                  </button>
+                  <button class="alchemy-tab" onclick="selectAlchemy(2)">
+                    <h4>03. Complexo Hialurónico Cristal</h4>
+                    <p>Três pesos moleculares para hidratação em camadas e efeito vidro imediato.</p>
+                  </button>
+                </div>
+              </div>
+
+              <div class="glass alchemy-panel" id="alchemyPanel">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Verified Testimonials -->
+        <section style="padding-top: 20px;">
+          <div class="container">
+            <div class="section-head">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Experiência Real</span>
+                <h2 class="section-title">Amado por Quem <em>Exige o Melhor</em></h2>
+              </div>
+            </div>
+            <div class="reviews-grid">
+              <div class="glass specular review-card">
+                <div style="color:var(--gold-bright);letter-spacing:3px;font-size:0.85rem;">★★★★★</div>
+                <p class="review-quote">“Em duas semanas a textura da minha pele mudou por completo. O Elixir Lumière deixa aquele brilho de pele descansada sem pesar nada.”</p>
+                <div class="review-author">
+                  <strong>Inês Vasconcelos · Lisboa</strong>
+                  <span>Elixir Lumière 01</span>
+                </div>
+              </div>
+              <div class="glass specular review-card">
+                <div style="color:var(--gold-bright);letter-spacing:3px;font-size:0.85rem;">★★★★★</div>
+                <p class="review-quote">“O perfume Âmbar de Lisboa é inesquecível. Toda a gente pergunta o que estou a usar, e o frasco gravado com as minhas iniciais é uma obra de arte.”</p>
+                <div class="review-author">
+                  <strong>Mariana Gouveia · Porto</strong>
+                  <span>Âmbar de Lisboa EDP</span>
+                </div>
+              </div>
+              <div class="glass specular review-card">
+                <div style="color:var(--gold-bright);letter-spacing:3px;font-size:0.85rem;">★★★★★</div>
+                <p class="review-quote">“Comprei o Cofre Glass Skin para mim e acabei por oferecer outro à minha mãe. A apresentação em vidro fosco e linho é puro luxo.”</p>
+                <div class="review-author">
+                  <strong>Beatriz Nogueira · Cascais</strong>
+                  <span>Cofre Ritual Glass Skin</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ====================================================================
+           PÁGINA 2: SKINCARE (PÁGINA DE VENDAS DE CUIDADOS DE ROSTO)
+           ==================================================================== -->
+      <div class="page-view" id="page-skincare">
+        <section style="padding-top: 28px;">
+          <div class="container">
+            <div class="glass-strong specular page-banner">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Página 02 · Alta Cosmética Facial</span>
+                <h1 class="section-title" style="font-size:clamp(2.5rem,4.8vw,4rem);margin-bottom:16px;">
+                  Skincare de <em>Precisão Botânica</em>
+                </h1>
+                <p style="color:var(--text-secondary);max-width:520px;margin-bottom:24px;">
+                  Fórmulas puras de absorção imediata desenvolvidas para recriar a luminosidade translúcida do vidro líquido. Sem silicones, sem parabenos e clinicamente comprovadas.
+                </p>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                  <button class="btn btn-primary btn-sm" onclick="addBundleRoutine()">
+                    <i data-lucide="sparkles" style="width:15px;height:15px;"></i> Comprar Rotina Dia & Noite (-15%)
+                  </button>
+                  <button class="btn btn-glass btn-sm" onclick="navigateTo('kits')">
+                    Ver Cofres com Desconto
+                  </button>
+                </div>
+              </div>
+              <div class="page-banner-img">
+                <img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85" alt="Coleção Skincare Lumière" />
+              </div>
+            </div>
+
+            <!-- Interactive Filter & Sort Bar -->
+            <div class="glass filter-toolbar">
+              <div class="filter-pills" id="skincareFilters">
+                <button class="filter-pill active" onclick="filterSkincare('all', this)">Todos (6)</button>
+                <button class="filter-pill" onclick="filterSkincare('serum', this)">Séruns & Elixires</button>
+                <button class="filter-pill" onclick="filterSkincare('creme', this)">Cremes & Bálsamos</button>
+                <button class="filter-pill" onclick="filterSkincare('luminosidade', this)">Luminosidade</button>
+                <button class="filter-pill" onclick="filterSkincare('anti-idade', this)">Firmeza & Anti-Idade</button>
+              </div>
+              <select class="sort-select" id="skincareSort" onchange="renderSkincareGrid()">
+                <option value="featured">Ordenar: Destaque</option>
+                <option value="price-asc">Preço: Menor para Maior</option>
+                <option value="price-desc">Preço: Maior para Menor</option>
+                <option value="rating">Melhor Avaliação</option>
+              </select>
+            </div>
+
+            <!-- Skincare Products Grid -->
+            <div class="product-grid" id="skincareGrid"></div>
+
+            <!-- Morning vs Night Ritual Glass Comparison -->
+            <div class="glass-strong specular" style="margin-top:54px;border-radius:30px;padding:38px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;align-items:center;">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Guia da Especialista</span>
+                <h3 class="serif" style="font-size:2.3rem;margin:12px 0 10px;">Como Combinar a Tua Rotina</h3>
+                <p style="color:var(--text-secondary);font-size:0.9rem;">
+                  A sinergia entre a Vitamina C de manhã e o Bakuchiol à noite duplica a renovação celular em 28 dias.
+                </p>
+              </div>
+              <div class="glass" style="padding:22px;border-radius:20px;">
+                <div style="display:flex;align-items:center;gap:10px;color:var(--gold-bright);font-weight:600;margin-bottom:10px;">
+                  <i data-lucide="sun" style="width:18px;height:18px;"></i> Ritual de Manhã · Brilho & Proteção
+                </div>
+                <p style="font-size:0.84rem;color:var(--text-secondary);">1. Essência Orvalho → 2. Elixir Lumière 01 → 3. Crème Nacre Efeito Vidro</p>
+              </div>
+              <div class="glass" style="padding:22px;border-radius:20px;">
+                <div style="display:flex;align-items:center;gap:10px;color:var(--rose);font-weight:600;margin-bottom:10px;">
+                  <i data-lucide="moon" style="width:18px;height:18px;"></i> Ritual de Noite · Reparação Profunda
+                </div>
+                <p style="font-size:0.84rem;color:var(--text-secondary);">1. Máscara Cristal (2x/sem) → 2. Sérum Nuit Céleste → 3. Bálsamo Olhos Aurora</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ====================================================================
+           PÁGINA 3: PERFUMARIA & CORPO (PÁGINA DE VENDAS OLFATIVA)
+           ==================================================================== -->
+      <div class="page-view" id="page-perfumaria">
+        <section style="padding-top: 28px;">
+          <div class="container">
+            <div class="glass-strong specular page-banner">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Página 03 · Haute Parfumerie & Corpo</span>
+                <h1 class="section-title" style="font-size:clamp(2.5rem,4.8vw,4rem);margin-bottom:16px;">
+                  Fragrâncias de <em>Luz & Âmbar</em>
+                </h1>
+                <p style="color:var(--text-secondary);max-width:520px;margin-bottom:24px;">
+                  Perfumes macerados durante 90 dias com essências mediterrânicas raras e óleos secos luminosos que envolvem a pele num véu acetinado.
+                </p>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                  <a href="#atelier-olfativo" class="btn btn-primary btn-sm">
+                    Explorar Pirâmide Olfativa <i data-lucide="wind" style="width:15px;height:15px;"></i>
+                  </a>
+                  <a href="#gravacao-studio" class="btn btn-glass btn-sm">
+                    Personalizar Frasco Grátis
+                  </a>
+                </div>
+              </div>
+              <div class="page-banner-img">
+                <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=85" alt="Perfumaria de Autor Lumière" />
+              </div>
+            </div>
+
+            <!-- Interactive Olfactory Pyramid Studio -->
+            <div class="glass-strong specular scent-studio" id="atelier-olfativo">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Atelier Olfativo Interativo</span>
+                <h2 class="section-title" style="font-size:2.4rem;">Descobre a <em>Pirâmide</em> de Cada Essência</h2>
+                <div class="scent-selector" id="scentTabs">
+                  <button class="filter-pill active" onclick="selectScent(0, this)">Âmbar de Lisboa</button>
+                  <button class="filter-pill" onclick="selectScent(1, this)">Néroli & Figo</button>
+                  <button class="filter-pill" onclick="selectScent(2, this)">Véu de Sândalo</button>
+                </div>
+                <p id="scentDesc" style="color:var(--text-secondary);font-size:0.92rem;margin-bottom:22px;"></p>
+                <div class="stat-bars" id="scentMetrics"></div>
+                <div style="margin-top:26px;">
+                  <button class="btn btn-primary btn-sm" id="scentBuyBtn">
+                    <i data-lucide="shopping-bag" style="width:15px;height:15px;"></i> Adicionar Esta Fragrância
+                  </button>
+                </div>
+              </div>
+
+              <div class="pyramid-layers" id="scentPyramid">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- Fragrance & Body Product Grid -->
+            <div class="section-head" style="margin-bottom:28px;">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Boutique Olfativa</span>
+                <h2 class="section-title" style="font-size:2.4rem;">Perfumes & <em>Óleos Luminosos</em></h2>
+              </div>
+              <p class="section-desc">Seleciona o formato (50ml ou 100ml) diretamente em cada frasco.</p>
+            </div>
+            <div class="product-grid" id="perfumariaGrid"></div>
+
+            <!-- Interactive Crystal Bottle Engraving Studio -->
+            <div class="glass-strong specular engraving-box" id="gravacao-studio">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Oferta Atelier · Gravação a Ouro</span>
+                <h3 class="section-title" style="font-size:2.4rem;margin-bottom:14px;">
+                  Grava as Tuas <em>Iniciais</em> no Cristal
+                </h3>
+                <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:22px;">
+                  Personaliza qualquer Eau de Parfum de 50ml ou 100ml com uma gravação artesanal gratuita. Pré-visualiza o resultado em tempo real:
+                </p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                  <input type="text" class="glass-input" id="engraveInput" maxlength="12" placeholder="Escreve iniciais ou nome (ex: M. S.)" oninput="updateEngraving(this.value)" style="flex:1;min-width:200px;" />
+                  <button class="btn btn-primary btn-sm" onclick="addEngravedPerfume()">
+                    Adicionar Gravado (€118)
+                  </button>
+                </div>
+              </div>
+              <div class="engraving-preview">
+                <img src="https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=1000&q=85" alt="Pré-visualização da gravação no frasco" />
+                <div class="engraving-plate" id="engravePlate">LUMIÈRE</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ====================================================================
+           PÁGINA 4: RITUAIS & KITS (PÁGINA DE VENDAS DE COFRES & DIAGNÓSTICO)
+           ==================================================================== -->
+      <div class="page-view" id="page-kits">
+        <section style="padding-top: 28px;">
+          <div class="container">
+            <div class="glass-strong specular page-banner">
+              <div>
+                <span class="eyebrow"><span class="dot"></span> Página 04 · Edições Limitadas & Poupança até 25%</span>
+                <h1 class="section-title" style="font-size:clamp(2.5rem,4.8vw,4rem);margin-bottom:16px;">
+                  Cofres & <em>Rituais Exclusivos</em>
+                </h1>
+                <p style="color:var(--text-secondary);max-width:520px;margin-bottom:22px;">
+                  Os nossos conjuntos mais desejados em caixas de apresentação em linho cru, acompanhados por acessórios de quartzo rosa e entrega prioritária gratuita.
+                </p>
+                <div class="glass" style="display:inline-flex;align-items:center;gap:14px;padding:10px 18px;border-radius:999px;font-size:0.82rem;">
+                  <i data-lucide="clock" style="width:16px;height:16px;color:var(--gold-bright);"></i>
+                  <span>Oferta de Lançamento termina em: <strong id="countdownTimer" style="color:var(--gold-bright);">04h 18m 52s</strong></span>
+                </div>
+              </div>
+              <div class="page-banner-img">
+                <img src="https://images.unsplash.com/photo-1590439471364-192aa70c0b53?auto=format&fit=crop&w=1000&q=85" alt="Cofre Ritual Completo Lumière" />
+              </div>
+            </div>
+
+            <!-- Curated Kits Grid -->
+            <div class="kits-grid" id="kitsGrid"></div>
+
+            <!-- Interactive 2-Step Glass Skin Diagnostic -->
+            <div class="glass-strong specular quiz-card">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+                <div>
+                  <span class="eyebrow"><span class="dot"></span> Consultoria Privada em 20 Segundos</span>
+                  <h2 class="section-title" style="font-size:2.4rem;">Descobre o Teu <em>Ritual Ideal</em></h2>
+                </div>
+                <span style="font-size:0.82rem;color:var(--text-secondary);">Seleciona o teu foco principal abaixo</span>
+              </div>
+
+              <div class="quiz-options" id="quizOptions">
+                <button class="quiz-opt selected" onclick="selectQuizGoal('glow', this)">
+                  <i data-lucide="sun" style="width:20px;height:20px;color:var(--gold-bright);margin-bottom:10px;"></i>
+                  <div class="serif" style="font-size:1.35rem;">Efeito Glass-Skin</div>
+                  <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Pele luminosa, uniforme e profundamente hidratada.</p>
+                </button>
+                <button class="quiz-opt" onclick="selectQuizGoal('firm', this)">
+                  <i data-lucide="shield-check" style="width:20px;height:20px;color:var(--rose);margin-bottom:10px;"></i>
+                  <div class="serif" style="font-size:1.35rem;">Firmeza & Juventude</div>
+                  <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Suavizar linhas finas e renovar a elasticidade.</p>
+                </button>
+                <button class="quiz-opt" onclick="selectQuizGoal('scent', this)">
+                  <i data-lucide="sparkles" style="width:20px;height:20px;color:var(--gold-bright);margin-bottom:10px;"></i>
+                  <div class="serif" style="font-size:1.35rem;">Assinatura Sensorial</div>
+                  <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Perfume envolvente e pele acetinada todo o dia.</p>
+                </button>
+                <button class="quiz-opt" onclick="selectQuizGoal('gift', this)">
+                  <i data-lucide="gift" style="width:20px;height:20px;color:var(--rose);margin-bottom:10px;"></i>
+                  <div class="serif" style="font-size:1.35rem;">Presente Inesquecível</div>
+                  <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">Miniaturas de cristal ideais para oferecer.</p>
+                </button>
+              </div>
+
+              <div class="glass quiz-result-box" id="quizResultBox">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- VIP Club Glass Banner -->
+            <div class="glass-strong specular vip-banner">
+              <span class="eyebrow"><span class="dot"></span> Clube Privado Lumière</span>
+              <h2 class="section-title" style="margin-top:14px;">Recebe <em>15% de Desconto</em> na Tua Primeira Encomenda</h2>
+              <p style="color:var(--text-secondary);max-width:540px;margin:12px auto 0;font-size:0.94rem;">
+                Acesso antecipado a edições limitadas, convites para eventos em Lisboa e amostras exclusivas em cada lançamento.
+              </p>
+              <form class="vip-form" onsubmit="subscribeVip(event)">
+                <input type="email" class="glass-input" id="vipEmail" required placeholder="O teu melhor email..." />
+                <button type="submit" class="btn btn-primary">Desbloquear 15%</button>
+              </form>
+              <p id="vipSuccess" style="display:none;margin-top:16px;color:var(--gold-bright);font-size:0.9rem;font-weight:500;">
+                ✦ Bem-vinda à Maison! Usa o código <strong style="text-decoration:underline;">LUMIERE15</strong> no teu cesto para 15% de desconto imediato.
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         FOOTER
+         ====================================================================== -->
+    <footer>
+      <div class="container">
+        <div class="footer-grid">
+          <div>
+            <div class="brand" style="margin-bottom:16px;">
+              <div class="brand-mark">
+                <i data-lucide="sparkles" style="width:17px;height:17px;color:#f6ddb6;"></i>
+              </div>
+              <div>
+                <span class="brand-name">LUMIÈRE</span>
+                <span class="brand-sub">Maison Botânica · Lisboa</span>
+              </div>
+            </div>
+            <p style="color:var(--text-secondary);font-size:0.86rem;max-width:300px;line-height:1.7;">
+              Alta cosmética botânica e perfumaria de autor desenhadas em Portugal, em frascos de vidro recarregáveis.
+            </p>
+          </div>
+          <div class="footer-col">
+            <h5>Páginas da Loja</h5>
+            <ul>
+              <li><button onclick="navigateTo('inicio')">01. Início</button></li>
+              <li><button onclick="navigateTo('skincare')">02. Skincare Facial</button></li>
+              <li><button onclick="navigateTo('perfumaria')">03. Perfumaria & Corpo</button></li>
+              <li><button onclick="navigateTo('kits')">04. Rituais & Kits</button></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Serviço ao Cliente</h5>
+            <ul>
+              <li><button onclick="openCart()">O Meu Cesto</button></li>
+              <li><button onclick="openWishlist()">Lista de Favoritos</button></li>
+              <li><button onclick="navigateTo('kits')">Diagnóstico de Pele</button></li>
+              <li><button onclick="navigateTo('perfumaria')">Gravação de Frascos</button></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <h5>Atelier Lisboa</h5>
+            <ul>
+              <li>Avenida da Liberdade, 184</li>
+              <li>Seg–Sáb · 10h00 às 20h00</li>
+              <li>concierge@lumiere-maison.pt</li>
+              <li style="color:var(--gold-bright);">Código Boas-Vindas: LUMIERE15</li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <span>© 2026 LUMIÈRE Maison Botânica. Todos os direitos reservados.</span>
+          <span>Pagamentos Seguros · MB WAY · Apple Pay · Visa · Mastercard</span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ========================================================================
+       BACKDROP & LIQUID-GLASS CART DRAWER
+       ======================================================================== -->
+  <div class="overlay-backdrop" id="backdrop" onclick="closeAllOverlays()"></div>
+
+  <aside class="drawer" id="cartDrawer" aria-label="Cesto de Compras">
+    <div class="drawer-head">
+      <div>
+        <div style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);">Boutique Lumière</div>
+        <h3 class="serif" style="font-size:1.7rem;">O Teu Cesto</h3>
+      </div>
+      <button class="icon-btn" onclick="closeAllOverlays()" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+
+    <!-- Free shipping glass bar -->
+    <div style="padding:12px 24px;border-bottom:1px solid rgba(255,238,224,0.1);background:rgba(231,194,142,0.06);">
+      <div id="shippingMsg" style="font-size:0.78rem;color:var(--gold-bright);margin-bottom:7px;"></div>
+      <div class="stat-track">
+        <div class="stat-fill" id="shippingBar" style="width:0%;"></div>
+      </div>
+    </div>
+
+    <div class="drawer-body" id="cartItems"></div>
+
+    <div class="drawer-foot">
+      <div style="display:flex;gap:8px;margin-bottom:16px;">
+        <input type="text" class="glass-input" id="promoInput" placeholder="Código promocional (LUMIERE15)" style="padding:10px 14px;font-size:0.8rem;" />
+        <button class="btn btn-glass btn-sm" onclick="applyPromo()">Aplicar</button>
+      </div>
+      <div style="display:grid;gap:7px;font-size:0.86rem;margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;color:var(--text-secondary);">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">€0,00</span>
+        </div>
+        <div id="discountRow" style="display:none;justify-content:space-between;color:#9de0b5;">
+          <span>Desconto (LUMIERE15 · -15%)</span>
+          <span id="cartDiscount">-€0,00</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;color:var(--text-secondary);">
+          <span>Envio Expresso 24h</span>
+          <span id="cartShipping">Grátis</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:1.15rem;font-weight:600;padding-top:10px;border-top:1px solid rgba(255,238,224,0.12);">
+          <span>Total</span>
+          <span class="serif" style="font-size:1.55rem;color:var(--gold-bright);" id="cartTotal">€0,00</span>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%;" onclick="openCheckout()">
+        Finalizar Compra Segura <i data-lucide="lock" style="width:15px;height:15px;"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- WISHLIST DRAWER -->
+  <aside class="drawer" id="wishlistDrawer" aria-label="Favoritos">
+    <div class="drawer-head">
+      <div>
+        <div style="font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--rose);">Curadoria Pessoal</div>
+        <h3 class="serif" style="font-size:1.7rem;">Os Teus Favoritos</h3>
+      </div>
+      <button class="icon-btn" onclick="closeAllOverlays()" aria-label="Fechar">
+        <i data-lucide="x" style="width:18px;height:18px;"></i>
+      </button>
+    </div>
+    <div class="drawer-body" id="wishlistItems"></div>
+  </aside>
+
+  <!-- QUICK VIEW MODAL -->
+  <div class="modal" id="quickViewModal" aria-modal="true" role="dialog">
+    <div class="modal-card" id="quickViewContent"></div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal" id="checkoutModal" aria-modal="true" role="dialog">
+    <div class="modal-card" style="max-width:540px;padding:34px;" id="checkoutContent"></div>
+  </div>
+
+  <!-- TOAST STACK -->
+  <div class="toast-stack" id="toastStack"></div>
+
+  <!-- ========================================================================
+       APPLICATION DATA & INTERACTIVE ENGINE
+       ======================================================================== -->
+  <script>
+    /* ------------------------------------------------------------------------
+       CATALOG DATA (ACROSS ALL 4 PAGES)
+       ------------------------------------------------------------------------ */
+    const IMG = {
+      serum: 'https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=900&q=85',
+      cream: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=900&q=85',
+      botanical: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=900&q=85',
+      spa: 'https://images.unsplash.com/photo-1590439471364-192aa70c0b53?auto=format&fit=crop&w=900&q=85',
+      perfume: 'https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=900&q=85',
+      perfumeNoir: 'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=900&q=85',
+      bodyMilk: 'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=900&q=85',
+      kit: 'https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=900&q=85'
+    };
+
+    const PRODUCTS = [
+      // SKINCARE (Página 2)
+      {
+        id: 'elixir-01',
+        name: 'Elixir Lumière 01',
+        subtitle: 'Sérum Vitamina C Pura & Camélia Branca',
+        category: 'skincare',
+        tags: ['serum', 'luminosidade'],
+        price: 78,
+        rating: 4.9,
+        reviews: 412,
+        volume: '30 ml',
+        badge: 'Bestseller',
+        bestseller: true,
+        image: IMG.serum,
+        description: 'Um elixir sedoso de absorção instantânea que ilumina, uniformiza o tom e devolve o efeito vidro líquido à pele desde a primeira semana.',
+        actives: ['Vitamina C Estabilizada 15%', 'Extrato de Camélia dos Açores', 'Ácido Ferúlico Botânico'],
+        ritual: 'Aplicar 3 a 4 gotas de manhã sobre a pele limpa antes do creme hidratante.'
+      },
+      {
+        id: 'creme-nacre',
+        name: 'Crème Nacre',
+        subtitle: 'Hidratante Efeito Vidro & Ceramidas',
+        category: 'skincare',
+        tags: ['creme', 'luminosidade'],
+        price: 86,
+        rating: 4.9,
+        reviews: 328,
+        volume: '50 ml',
+        badge: 'Ícone',
+        bestseller: true,
+        image: IMG.cream,
+        description: 'Textura nuvem nacarada que preenche linhas de desidratação e reforça a barreira cutânea durante 48 horas com acabamento luminoso.',
+        actives: ['Ceramidas Biomiméticas', 'Esqualano de Azeitona', 'Pérola Botânica'],
+        ritual: 'Massajar suavemente no rosto e pescoço de manhã e à noite.'
+      },
+      {
+        id: 'nuit-celeste',
+        name: 'Sérum Nuit Céleste',
+        subtitle: 'Concentrado Reparador Bakuchiol 2%',
+        category: 'skincare',
+        tags: ['serum', 'anti-idade'],
+        price: 92,
+        rating: 5.0,
+        reviews: 214,
+        volume: '30 ml',
+        badge: 'Novo',
+        bestseller: false,
+        image: IMG.botanical,
+        description: 'Renovação noturna intensiva que estimula o colagénio natural e suaviza sinais de fadiga sem a sensibilidade do retinol tradicional.',
+        actives: ['Bakuchiol Puro 2%', 'Peptídeos de Cobre', 'Óleo de Rosa Mosqueta'],
+        ritual: 'Aplicar 4 gotas à noite com movimentos ascendentes.'
+      },
+      {
+        id: 'essencia-orvalho',
+        name: 'Essência Orvalho',
+        subtitle: 'Bruma Hialurónica Tri-Molecular',
+        category: 'skincare',
+        tags: ['serum', 'luminosidade'],
+        price: 54,
+        rating: 4.8,
+        reviews: 189,
+        volume: '100 ml',
+        badge: 'Hidratação',
+        bestseller: false,
+        image: IMG.serum,
+        description: 'Névoa microfina que prepara a pele para potenciar os séruns e refresca a luminosidade ao longo do dia, mesmo sobre maquilhagem.',
+        actives: ['Ácido Hialurónico 3D', 'Água Floral de Néroli', 'Niacinamida 4%'],
+        ritual: 'Vaporizar a 20 cm do rosto sempre que desejar frescura e brilho.'
+      },
+      {
+        id: 'balsamo-aurora',
+        name: 'Bálsamo Olhos Aurora',
+        subtitle: 'Contorno Desfatigante & Cafeína Verde',
+        category: 'skincare',
+        tags: ['creme', 'anti-idade'],
+        price: 64,
+        rating: 4.8,
+        reviews: 156,
+        volume: '15 ml',
+        badge: 'Olhar',
+        bestseller: false,
+        image: IMG.cream,
+        description: 'Funde-se delicadamente no contorno ocular para atenuar olheiras, desinchar papos e iluminar o olhar instantaneamente.',
+        actives: ['Cafeína Botânica', 'Peptídeo Tensor', 'Extrato de Flor Branca'],
+        ritual: 'Aplicar com leves toques do dedo anelar de manhã e à noite.'
+      },
+      {
+        id: 'mascara-cristal',
+        name: 'Máscara Cristal',
+        subtitle: 'Peeling Enzimático de Romã & Mel',
+        category: 'skincare',
+        tags: ['creme', 'anti-idade', 'luminosidade'],
+        price: 68,
+        rating: 4.9,
+        reviews: 203,
+        volume: '50 ml',
+        badge: 'Spa em Casa',
+        bestseller: false,
+        image: IMG.spa,
+        description: 'Geleia translúcida que remove células mortas em 10 minutos sem abrasão, revelando uma tez incrivelmente lisa e radiante.',
+        actives: ['Enzimas de Romã', 'PHA Suave 5%', 'Aloé Vera Orgânico'],
+        ritual: 'Aplicar 1 a 2 vezes por semana durante 10 minutos e enxaguar com água morna.'
+      },
+
+      // PERFUMARIA & CORPO (Página 3)
+      {
+        id: 'ambar-lisboa',
+        name: 'Âmbar de Lisboa',
+        subtitle: 'Eau de Parfum · Quente & Luminoso',
+        category: 'perfumaria',
+        tags: ['perfume'],
+        price: 118,
+        sizes: [{ label: '50 ml', price: 118 }, { label: '100 ml', price: 168 }],
+        rating: 5.0,
+        reviews: 519,
+        volume: '50 ml',
+        badge: 'Assinatura',
+        bestseller: true,
+        image: IMG.perfume,
+        description: 'Um tributo à hora dourada sobre o Tejo: bergamota cintilante, flor de laranjeira quente e um fundo viciante de âmbar dourado e baunilha.',
+        actives: ['Bergamota da Calábria', 'Flor de Laranjeira', 'Âmbar Branco & Baunilha'],
+        ritual: 'Pulverizar nos pontos de pulsação — pulsos, pescoço e atrás das orelhas.'
+      },
+      {
+        id: 'neroli-figo',
+        name: 'Néroli & Figo Selvagem',
+        subtitle: 'Eau de Parfum · Solar & Verde',
+        category: 'perfumaria',
+        tags: ['perfume'],
+        price: 112,
+        sizes: [{ label: '50 ml', price: 112 }, { label: '100 ml', price: 158 }],
+        rating: 4.9,
+        reviews: 267,
+        volume: '50 ml',
+        badge: 'Edição Solar',
+        bestseller: false,
+        image: IMG.perfume,
+        description: 'A brisa de um jardim mediterrânico ao entardecer, combinando folhas frescas de figueira, néroli luminoso e cedro branco.',
+        actives: ['Folha de Figo', 'Néroli de Tunísia', 'Cedro & Almíscar Suave'],
+        ritual: 'Ideal para o dia-a-dia luminoso e noites quentes de verão.'
+      },
+      {
+        id: 'oleo-dourado',
+        name: 'Óleo Seco Dourado',
+        subtitle: 'Néctar Acetino para Corpo & Cabelo',
+        category: 'perfumaria',
+        tags: ['corpo'],
+        price: 62,
+        rating: 4.9,
+        reviews: 344,
+        volume: '100 ml',
+        badge: 'Bestseller',
+        bestseller: true,
+        image: IMG.botanical,
+        description: 'Mistura preciosa de 6 óleos botânicos prensados a frio com micro-reflexos minerais dourados que nutrem sem deixar sensação oleosa.',
+        actives: ['Óleo de Camélia', 'Amêndoa Doce', 'Mica Mineral Dourada Natural'],
+        ritual: 'Agitar suavemente e aplicar nas pernas, ombros, decote e pontas do cabelo.'
+      },
+      {
+        id: 'veu-sandalo',
+        name: 'Véu de Sândalo',
+        subtitle: 'Eau de Parfum · Aveludado & Intenso',
+        category: 'perfumaria',
+        tags: ['perfume'],
+        price: 124,
+        sizes: [{ label: '50 ml', price: 124 }, { label: '100 ml', price: 176 }],
+        rating: 4.9,
+        reviews: 198,
+        volume: '50 ml',
+        badge: 'Exclusivo',
+        bestseller: false,
+        image: IMG.perfumeNoir,
+        description: 'Sofisticação minimalista e envolvente: cardamomo cremoso, íris atalcada e madeira de sândalo australiano de fixação superior a 12h.',
+        actives: ['Cardamomo', 'Íris Florentina', 'Sândalo & Caxemira'],
+        ritual: 'Perfeito para eventos noturnos ou em layering com o Óleo Seco Dourado.'
+      },
+      {
+        id: 'leite-seda',
+        name: 'Leite Corporal Seda',
+        subtitle: 'Emulsão Perfumada de Amêndoa & Mel',
+        category: 'perfumaria',
+        tags: ['corpo'],
+        price: 48,
+        rating: 4.8,
+        reviews: 141,
+        volume: '200 ml',
+        badge: 'Corpo',
+        bestseller: false,
+        image: IMG.bodyMilk,
+        description: 'Hidratação voluptuosa que prolonga a duração da tua fragrância Lumière favorita e deixa a pele macia como seda.',
+        actives: ['Manteiga de Karité Pura', 'Leite de Amêndoa', 'Vitamina E'],
+        ritual: 'Aplicar generosamente após o banho sobre a pele ligeiramente húmida.'
+      },
+      {
+        id: 'bruma-laranjeira',
+        name: 'Bruma Flor de Laranjeira',
+        subtitle: 'Perfume Suave de Cabelo & Corpo',
+        category: 'perfumaria',
+        tags: ['corpo'],
+        price: 52,
+        rating: 4.8,
+        reviews: 175,
+        volume: '100 ml',
+        badge: 'Sem Álcool',
+        bestseller: false,
+        image: IMG.spa,
+        description: 'Fórmula delicada sem álcool enriquecida com proteínas de seda que perfuma o cabelo deixando-o brilhante e leve.',
+        actives: ['Flor de Laranjeira', 'Pantenol B5', 'Extrato de Seda Vegetal'],
+        ritual: 'Vaporizar na escova ou diretamente sobre o cabelo e corpo.'
+      },
+
+      // RITUAIS & KITS (Página 4)
+      {
+        id: 'kit-glass-skin',
+        name: 'Cofre Ritual Glass Skin',
+        subtitle: 'Rotina Completa + Gua Sha Quartzo Rosa',
+        category: 'kits',
+        price: 189,
+        oldPrice: 242,
+        savings: 53,
+        rating: 5.0,
+        reviews: 289,
+        volume: '4 Peças',
+        badge: 'Poupe €53',
+        image: IMG.spa,
+        items: ['Elixir Lumière 01 (30ml)', 'Crème Nacre Efeito Vidro (50ml)', 'Essência Orvalho (100ml)', 'Gua Sha Quartzo Rosa + Caixa de Linho'],
+        description: 'O nosso ritual assinatura para conquistar uma pele translúcida, firme e intensamente hidratada em 14 dias.',
+        actives: ['Vitamina C 15%', 'Ceramidas Biomiméticas', 'Ácido Hialurónico 3D'],
+        ritual: 'Rotina completa de manhã e noite com massagem drenante Gua Sha.'
+      },
+      {
+        id: 'kit-dia-noite',
+        name: 'Duo Luminosidade 24h',
+        subtitle: 'Sinergia Vitamina C + Bakuchiol 2%',
+        category: 'kits',
+        price: 144,
+        oldPrice: 170,
+        savings: 26,
+        rating: 4.9,
+        reviews: 194,
+        volume: '2x 30 ml',
+        badge: 'Poupe €26',
+        image: IMG.serum,
+        items: ['Elixir Lumière 01 (Manhã · 30ml)', 'Sérum Nuit Céleste (Noite · 30ml)', 'Bolsa de Viagem em Veludo Champagne'],
+        description: 'A dupla de alta performance para iluminar de dia e regenerar profundamente durante o sono.',
+        actives: ['Vitamina C 15%', 'Bakuchiol 2%', 'Peptídeos'],
+        ritual: 'Elixir Lumière de manhã e Nuit Céleste à noite.'
+      },
+      {
+        id: 'kit-assinatura-perfume',
+        name: 'Coffret Assinatura Perfumada',
+        subtitle: 'Âmbar de Lisboa EDP + Óleo Dourado',
+        category: 'kits',
+        price: 149,
+        oldPrice: 180,
+        savings: 31,
+        rating: 5.0,
+        reviews: 162,
+        volume: '50ml + 100ml',
+        badge: 'Poupe €31',
+        image: IMG.perfume,
+        items: ['Eau de Parfum Âmbar de Lisboa (50ml)', 'Óleo Seco Dourado (100ml)', 'Gravação Personalizada Grátis'],
+        description: 'O segredo do layering perfeito: aplica o óleo dourado e sobrepõe o perfume para uma aura irresistível até 16 horas.',
+        actives: ['Âmbar Branco', 'Óleo de Camélia', 'Mica Mineral'],
+        ritual: 'Aplicar o óleo na pele seca e pulverizar o perfume por cima.'
+      },
+      {
+        id: 'kit-descoberta',
+        name: 'Kit Descoberta Cristal',
+        subtitle: '4 Miniaturas Icónicas para Viajar ou Oferecer',
+        category: 'kits',
+        price: 69,
+        oldPrice: 88,
+        savings: 19,
+        rating: 4.9,
+        reviews: 231,
+        volume: '4x 15 ml',
+        badge: 'Ideal Oferta',
+        image: IMG.kit,
+        items: ['Elixir Lumière (15ml)', 'Crème Nacre (15ml)', 'Âmbar de Lisboa (15ml)', 'Óleo Seco Dourado (15ml)'],
+        description: 'Experimenta os 4 bestsellers da Maison em frascos de vidro perfeitos para bagagem de cabine ou presente de luxo.',
+        actives: ['Coleção Completa', 'Aprovado Cabine', 'Cartão Mensagem Incluído'],
+        ritual: 'A porta de entrada perfeita para o universo Lumière.'
+      }
+    ];
+
+    const ALCHEMY_DATA = [
+      {
+        eyebrow: 'Colheita Atlântica · São Miguel',
+        title: 'Camélia Branca dos Açores',
+        desc: 'Extraída a frio em menos de 6 horas após a colheita, preserva 3x mais polifenóis que o extrato convencional, protegendo o colagénio e iluminando peles baças.',
+        stats: [
+          { label: 'Poder Antioxidante', value: 96 },
+          { label: 'Luminosidade Visível', value: 94 },
+          { label: 'Tolerância Pele Sensível', value: 99 }
+        ]
+      },
+      {
+        eyebrow: 'Biotecnologia Verde · Psoralea Corylifolia',
+        title: 'Bakuchiol Botânico 2%',
+        desc: 'Estimula a renovação celular e reduz rídulas com a mesma eficácia clínica do retinol, mas com zero vermelhidão, descamação ou sensibilidade solar.',
+        stats: [
+          { label: 'Redução de Linhas Finas', value: 91 },
+          { label: 'Firmeza Cutânea', value: 93 },
+          { label: 'Conforto Sem Irritação', value: 98 }
+        ]
+      },
+      {
+        eyebrow: 'Hidratação Multicamada · Efeito Vidro',
+        title: 'Complexo Hialurónico Cristal',
+        desc: 'Combina moléculas micro, médias e de superfície para atrair até 1000x o seu peso em água, criando o acabamento refletor de luz característico da Lumière.',
+        stats: [
+          { label: 'Hidratação 48 Horas', value: 98 },
+          { label: 'Efeito Preenchimento', value: 92 },
+          { label: 'Barreira Protetora', value: 95 }
+        ]
+      }
+    ];
+
+    const SCENTS = [
+      {
+        id: 'ambar-lisboa',
+        name: 'Âmbar de Lisboa',
+        desc: 'Quente, magnético e solar. Captura o reflexo dourado do sol de final de tarde sobre a pedra calcária de Lisboa.',
+        top: 'Bergamota Italiana · Pimenta Rosa · Tangerina',
+        heart: 'Flor de Laranjeira · Jasmim Sambac · Mel Branco',
+        base: 'Âmbar Dourado · Baunilha de Madagáscar · Cedro',
+        metrics: [
+          { label: 'Fixação (12h+)', value: 95 },
+          { label: 'Projeção Elegante', value: 88 },
+          { label: 'Calor & Sensualidade', value: 94 }
+        ]
+      },
+      {
+        id: 'neroli-figo',
+        name: 'Néroli & Figo Selvagem',
+        desc: 'Fresco, luminoso e mediterrânico. A crocância da folha de figueira abraçada por flores brancas orvalhadas.',
+        top: 'Folha de Figo · Limão Siciliano · Petitgrain',
+        heart: 'Néroli Puro · Figo Verde · Chá Branco',
+        base: 'Madeira de Figueira · Almíscar Limpo · Vetiver',
+        metrics: [
+          { label: 'Fixação (9h+)', value: 84 },
+          { label: 'Frescura Botânica', value: 96 },
+          { label: 'Versatilidade Diária', value: 95 }
+        ]
+      },
+      {
+        id: 'veu-sandalo',
+        name: 'Véu de Sândalo',
+        desc: 'Íntimo, cremoso e hipnótico. Um abraço de caxemira e madeiras nobres com um toque aveludado de íris.',
+        top: 'Cardamomo Verde · Pera Branca · Incenso Suave',
+        heart: 'Íris Florentina · Violeta · Leite de Amêndoa',
+        base: 'Sândalo Australiano · Fava Tonka · Caxemira',
+        metrics: [
+          { label: 'Fixação (14h+)', value: 97 },
+          { label: 'Profundidade Noturna', value: 93 },
+          { label: 'Rasto Aveludado', value: 91 }
+        ]
+      }
+    ];
+
+    const QUIZ_RECS = {
+      glow: {
+        id: 'kit-glass-skin',
+        badge: 'Recomendação #1 para Glass-Skin',
+        title: 'Cofre Ritual Glass Skin Completo',
+        text: 'Combina Vitamina C 15%, Ceramidas e Ácido Hialurónico 3D + Gua Sha para brilho espelhado em 14 dias.',
+        price: '€189,00'
+      },
+      firm: {
+        id: 'kit-dia-noite',
+        badge: 'Recomendação #1 para Firmeza',
+        title: 'Duo Luminosidade & Renovação 24h',
+        text: 'Elixir Lumière de manhã e Bakuchiol 2% à noite para estimular colagénio e suavizar linhas finas.',
+        price: '€144,00'
+      },
+      scent: {
+        id: 'kit-assinatura-perfume',
+        badge: 'Recomendação #1 Sensorial',
+        title: 'Coffret Assinatura Perfumada',
+        text: 'Âmbar de Lisboa EDP 50ml com gravação grátis + Óleo Seco Dourado para pele radiante e perfumada.',
+        price: '€149,00'
+      },
+      gift: {
+        id: 'kit-descoberta',
+        badge: 'Recomendação #1 para Oferta',
+        title: 'Kit Descoberta Cristal (4 Peças)',
+        text: 'Os 4 ícones da Maison em miniaturas de vidro de luxo com embalagem de presente e cartão incluídos.',
+        price: '€69,00'
+      }
+    };
+
+    /* ------------------------------------------------------------------------
+       STATE (PERSISTED IN LOCALSTORAGE)
+       ------------------------------------------------------------------------ */
+    let currentPage = 'inicio';
+    let skincareFilter = 'all';
+    let selectedSizes = {}; // productId -> sizeIndex
+    let promoApplied = false;
+    let cart = JSON.parse(localStorage.getItem('lumiere_cart') || '[]');
+    let wishlist = JSON.parse(localStorage.getItem('lumiere_wish') || '[]');
+
+    function saveState() {
+      localStorage.setItem('lumiere_cart', JSON.stringify(cart));
+      localStorage.setItem('lumiere_wish', JSON.stringify(wishlist));
+    }
+
+    function formatEUR(val) {
+      return '€' + Number(val).toFixed(2).replace('.', ',');
+    }
+
+    /* ------------------------------------------------------------------------
+       4-PAGE SPA ROUTER WITH SMOOTH GSAP TRANSITIONS
+       ------------------------------------------------------------------------ */
+    function navigateTo(pageId, pushHash = true) {
+      const valid = ['inicio', 'skincare', 'perfumaria', 'kits'];
+      if (!valid.includes(pageId)) pageId = 'inicio';
+      currentPage = pageId;
+
+      document.querySelectorAll('.page-view').forEach(el => {
+        el.classList.remove('active');
+      });
+
+      const target = document.getElementById('page-' + pageId);
+      target.classList.add('active');
+
+      // Update active pills in desktop & mobile nav
+      document.querySelectorAll('.nav-link[data-page]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.page === pageId);
+      });
+
+      if (pushHash) {
+        history.replaceState(null, '', '#' + pageId);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Fluid GSAP page entrance (only animate on interactive tab switch, keep initial load crisp)
+      if (window.gsap && pushHash) {
+        gsap.killTweensOf(target);
+        gsap.fromTo(target,
+          { opacity: 0, y: 16 },
+          { opacity: 1, y: 0, duration: 0.45, ease: 'power3.out', clearProps: 'opacity,transform' }
+        );
+      } else {
+        target.style.opacity = '1';
+      }
+
+      lucide.createIcons();
+    }
+
+    function toggleMobileMenu(force) {
+      const drawer = document.getElementById('mobileNav');
+      if (typeof force === 'boolean') {
+        drawer.classList.toggle('open', force);
+      } else {
+        drawer.classList.toggle('open');
+      }
+    }
+
+    /* ------------------------------------------------------------------------
+       PRODUCT CARD TEMPLATE
+       ------------------------------------------------------------------------ */
+    function getProductPrice(prod) {
+      if (prod.sizes) {
+        const idx = selectedSizes[prod.id] || 0;
+        return prod.sizes[idx].price;
+      }
+      return prod.price;
+    }
+
+    function getProductVolume(prod) {
+      if (prod.sizes) {
+        const idx = selectedSizes[prod.id] || 0;
+        return prod.sizes[idx].label;
+      }
+      return prod.volume;
+    }
+
+    function productCardHTML(p) {
+      const isWish = wishlist.includes(p.id);
+      const price = getProductPrice(p);
+      const sizeIdx = selectedSizes[p.id] || 0;
+
+      const sizeSelector = p.sizes ? `
+        <div class="size-pills">
+          ${p.sizes.map((s, idx) => `
+            <button class="size-pill ${idx === sizeIdx ? 'active' : ''}" onclick="setProductSize('${p.id}', ${idx})">
+              ${s.label}
+            </button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      return `
+        <article class="glass specular product-card">
+          <div class="product-media">
+            <div class="product-badges">
+              <span class="prod-badge ${p.oldPrice ? 'sale' : ''}">${p.badge}</span>
+            </div>
+            <div class="product-quick-actions">
+              <button class="icon-btn ${isWish ? 'wish-active' : ''}" style="width:36px;height:36px;" onclick="toggleWishlist('${p.id}')" aria-label="Favorito">
+                <i data-lucide="heart" style="width:15px;height:15px;${isWish ? 'fill:currentColor;' : ''}"></i>
+              </button>
+            </div>
+            <img src="${p.image}" alt="${p.name}" loading="lazy" />
+            <button class="quick-view-bar" onclick="openQuickView('${p.id}')">
+              Vista Rápida · Ver Ativos
+            </button>
+          </div>
+          <div class="product-body">
+            <div class="product-meta">
+              <span>${getProductVolume(p)}</span>
+              <span class="rating">★ ${p.rating.toFixed(1)} <span style="color:var(--text-muted);font-weight:400;">(${p.reviews})</span></span>
+            </div>
+            <h3 class="product-title">${p.name}</h3>
+            <p class="product-sub">${p.subtitle}</p>
+            ${sizeSelector}
+            <div class="product-footer">
+              <div class="price-wrap">
+                <span class="price">${formatEUR(price)}</span>
+                ${p.oldPrice ? `<span class="price-old">${formatEUR(p.oldPrice)}</span>` : ''}
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('${p.id}')">
+                <i data-lucide="plus" style="width:14px;height:14px;"></i> Cesto
+              </button>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    function setProductSize(prodId, idx) {
+      selectedSizes[prodId] = idx;
+      renderAllProductGrids();
+    }
+
+    /* ------------------------------------------------------------------------
+       RENDER GRIDS ACROSS ALL 4 PAGES
+       ------------------------------------------------------------------------ */
+    function renderAllProductGrids() {
+      // Page 1: Bestsellers
+      const best = PRODUCTS.filter(p => p.bestseller);
+      document.getElementById('bestsellersGrid').innerHTML = best.map(productCardHTML).join('');
+
+      // Page 2: Skincare
+      renderSkincareGrid();
+
+      // Page 3: Perfumaria & Corpo
+      const perf = PRODUCTS.filter(p => p.category === 'perfumaria');
+      document.getElementById('perfumariaGrid').innerHTML = perf.map(productCardHTML).join('');
+
+      // Page 4: Kits
+      renderKitsGrid();
+
+      lucide.createIcons();
+    }
+
+    function filterSkincare(tag, btn) {
+      skincareFilter = tag;
+      document.querySelectorAll('#skincareFilters .filter-pill').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderSkincareGrid();
+    }
+
+    function renderSkincareGrid() {
+      let list = PRODUCTS.filter(p => p.category === 'skincare');
+      if (skincareFilter !== 'all') {
+        list = list.filter(p => p.tags && p.tags.includes(skincareFilter));
+      }
+      const sort = document.getElementById('skincareSort').value;
+      if (sort === 'price-asc') list.sort((a, b) => a.price - b.price);
+      if (sort === 'price-desc') list.sort((a, b) => b.price - a.price);
+      if (sort === 'rating') list.sort((a, b) => b.rating - a.rating);
+
+      document.getElementById('skincareGrid').innerHTML = list.map(productCardHTML).join('');
+      lucide.createIcons();
+    }
+
+    function renderKitsGrid() {
+      const kits = PRODUCTS.filter(p => p.category === 'kits');
+      document.getElementById('kitsGrid').innerHTML = kits.map(k => `
+        <article class="glass specular kit-card">
+          <div class="kit-img">
+            <div class="product-badges">
+              <span class="prod-badge sale">${k.badge}</span>
+            </div>
+            <img src="${k.image}" alt="${k.name}" loading="lazy" />
+          </div>
+          <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.74rem;color:var(--gold);margin-bottom:6px;">
+              <span style="text-transform:uppercase;letter-spacing:0.12em;">${k.volume}</span>
+              <span>★ ${k.rating.toFixed(1)} (${k.reviews})</span>
+            </div>
+            <h3 class="serif" style="font-size:1.85rem;line-height:1.08;">${k.name}</h3>
+            <p style="font-size:0.84rem;color:var(--text-secondary);margin-top:4px;">${k.subtitle}</p>
+            <ul class="kit-list">
+              ${k.items.map(it => `<li><i data-lucide="check" style="width:14px;height:14px;color:var(--gold-bright);flex-shrink:0;"></i> ${it}</li>`).join('')}
+            </ul>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:12px;border-top:1px solid rgba(255,238,224,0.1);">
+              <div class="price-wrap">
+                <span class="price">${formatEUR(k.price)}</span>
+                <span class="price-old">${formatEUR(k.oldPrice)}</span>
+              </div>
+              <button class="btn btn-primary btn-sm" onclick="addToCart('${k.id}')">
+                <i data-lucide="shopping-bag" style="width:14px;height:14px;"></i> Adicionar Cofre
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    /* ------------------------------------------------------------------------
+       INTERACTIVE MODULES (ALCHEMY, OLFACTORY PYRAMID, ENGRAVING, QUIZ)
+       ------------------------------------------------------------------------ */
+    function selectAlchemy(index) {
+      document.querySelectorAll('#alchemyTabs .alchemy-tab').forEach((t, i) => {
+        t.classList.toggle('active', i === index);
+      });
+      const item = ALCHEMY_DATA[index];
+      document.getElementById('alchemyPanel').innerHTML = `
+        <div>
+          <div style="font-size:0.72rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">${item.eyebrow}</div>
+          <h3 class="serif" style="font-size:2.1rem;line-height:1.08;margin-bottom:12px;">${item.title}</h3>
+          <p style="color:var(--text-secondary);font-size:0.92rem;line-height:1.7;">${item.desc}</p>
+        </div>
+        <div class="stat-bars">
+          ${item.stats.map(s => `
+            <div>
+              <div class="stat-bar-head">
+                <span>${s.label}</span>
+                <strong style="color:var(--gold-bright);">${s.value}%</strong>
+              </div>
+              <div class="stat-track">
+                <div class="stat-fill" style="width:${s.value}%;"></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function selectScent(index, btn) {
+      if (btn) {
+        document.querySelectorAll('#scentTabs .filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+      const s = SCENTS[index];
+      document.getElementById('scentDesc').textContent = s.desc;
+      document.getElementById('scentBuyBtn').onclick = () => addToCart(s.id);
+      document.getElementById('scentMetrics').innerHTML = s.metrics.map(m => `
+        <div>
+          <div class="stat-bar-head"><span>${m.label}</span><strong style="color:var(--gold-bright);">${m.value}%</strong></div>
+          <div class="stat-track"><div class="stat-fill" style="width:${m.value}%;"></div></div>
+        </div>
+      `).join('');
+
+      document.getElementById('scentPyramid').innerHTML = `
+        <div class="pyramid-layer" style="width:78%;margin:0 auto;">
+          <div><span>Notas de Topo</span><br/><strong>${s.top}</strong></div>
+          <i data-lucide="sparkles" style="width:18px;height:18px;color:var(--gold-bright);flex-shrink:0;"></i>
+        </div>
+        <div class="pyramid-layer" style="width:90%;margin:0 auto;">
+          <div><span>Notas de Coração</span><br/><strong>${s.heart}</strong></div>
+          <i data-lucide="flower-2" style="width:18px;height:18px;color:var(--rose);flex-shrink:0;"></i>
+        </div>
+        <div class="pyramid-layer" style="width:100%;">
+          <div><span>Notas de Fundo</span><br/><strong>${s.base}</strong></div>
+          <i data-lucide="flame" style="width:18px;height:18px;color:var(--amber);flex-shrink:0;"></i>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function updateEngraving(val) {
+      const clean = val.trim();
+      document.getElementById('engravePlate').textContent = clean ? clean.toUpperCase() : 'LUMIÈRE';
+    }
+
+    function addEngravedPerfume() {
+      const text = (document.getElementById('engraveInput').value.trim() || 'LUMIÈRE').toUpperCase();
+      addToCart('ambar-lisboa', `Gravação: "${text}"`);
+    }
+
+    function selectQuizGoal(goal, btn) {
+      if (btn) {
+        document.querySelectorAll('#quizOptions .quiz-opt').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      }
+      const r = QUIZ_RECS[goal];
+      document.getElementById('quizResultBox').innerHTML = `
+        <div>
+          <div style="font-size:0.72rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gold);margin-bottom:4px;">${r.badge}</div>
+          <h4 class="serif" style="font-size:1.75rem;line-height:1.1;">${r.title}</h4>
+          <p style="font-size:0.86rem;color:var(--text-secondary);margin-top:4px;max-width:560px;">${r.text}</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span class="serif" style="font-size:1.8rem;color:var(--gold-bright);font-weight:600;">${r.price}</span>
+          <button class="btn btn-primary btn-sm" onclick="addToCart('${r.id}')">
+            <i data-lucide="plus" style="width:15px;height:15px;"></i> Adicionar Recomendação
+          </button>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function addBundleRoutine() {
+      addToCart('kit-dia-noite');
+    }
+
+    function subscribeVip(e) {
+      e.preventDefault();
+      document.getElementById('vipSuccess').style.display = 'block';
+      document.getElementById('vipEmail').value = '';
+      showToast('Código LUMIERE15 desbloqueado! (-15% no cesto)');
+    }
+
+    /* ------------------------------------------------------------------------
+       SHOPPING CART, WISHLIST, QUICK VIEW & CHECKOUT
+       ------------------------------------------------------------------------ */
+    function addToCart(productId, customNote = '') {
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (!prod) return;
+
+      const volume = getProductVolume(prod);
+      const price = getProductPrice(prod);
+      const key = `${productId}__${volume}__${customNote}`;
+
+      const existing = cart.find(i => i.key === key);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({
+          key,
+          id: prod.id,
+          name: prod.name,
+          image: prod.image,
+          volume,
+          note: customNote,
+          price,
+          qty: 1
+        });
+      }
+
+      saveState();
+      updateBadges();
+      renderCart();
+      showToast(`"${prod.name}" adicionado ao cesto`);
+    }
+
+    function updateQty(key, delta) {
+      const item = cart.find(i => i.key === key);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.key !== key);
+      }
+      saveState();
+      updateBadges();
+      renderCart();
+    }
+
+    function toggleWishlist(productId) {
+      const idx = wishlist.indexOf(productId);
+      const prod = PRODUCTS.find(p => p.id === productId);
+      if (idx > -1) {
+        wishlist.splice(idx, 1);
+        showToast(`Removido dos favoritos`);
+      } else {
+        wishlist.push(productId);
+        showToast(`"${prod.name}" guardado nos favoritos`);
+      }
+      saveState();
+      updateBadges();
+      renderAllProductGrids();
+      renderWishlist();
+    }
+
+    function updateBadges() {
+      const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+      const cb = document.getElementById('cartBadge');
+      const wb = document.getElementById('wishBadge');
+      cb.textContent = totalItems;
+      wb.textContent = wishlist.length;
+      cb.classList.add('bump');
+      setTimeout(() => cb.classList.remove('bump'), 280);
+    }
+
+    function renderCart() {
+      const wrap = document.getElementById('cartItems');
+      const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const freeShipThreshold = 65;
+      const pct = Math.min(100, (subtotal / freeShipThreshold) * 100);
+
+      document.getElementById('shippingBar').style.width = pct + '%';
+      document.getElementById('shippingMsg').textContent = subtotal >= freeShipThreshold
+        ? '✦ Envio Expresso 24h Grátis + 2 Amostras de Luxo Desbloqueados!'
+        : `Faltam ${formatEUR(freeShipThreshold - subtotal)} para Envio Expresso Grátis`;
+
+      if (cart.length === 0) {
+        wrap.innerHTML = `
+          <div style="text-align:center;padding:56px 16px;color:var(--text-secondary);">
+            <i data-lucide="shopping-bag" style="width:40px;height:40px;color:var(--gold);opacity:0.65;margin:0 auto 14px;"></i>
+            <p class="serif" style="font-size:1.5rem;color:var(--text-primary);margin-bottom:6px;">O teu cesto está vazio</p>
+            <p style="font-size:0.84rem;margin-bottom:20px;">Explora os nossos elixires, fragrâncias e cofres exclusivos.</p>
+            <button class="btn btn-glass btn-sm" onclick="closeAllOverlays(); navigateTo('skincare');">Explorar Skincare</button>
+          </div>
+        `;
+      } else {
+        wrap.innerHTML = cart.map(item => `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" />
+            <div style="display:flex;flex-direction:column;justify-content:space-between;">
+              <div style="display:flex;justify-content:space-between;gap:8px;">
+                <div>
+                  <div class="serif" style="font-size:1.2rem;line-height:1.1;">${item.name}</div>
+                  <div style="font-size:0.74rem;color:var(--text-secondary);">${item.volume}${item.note ? ' · ' + item.note : ''}</div>
+                </div>
+                <strong style="color:var(--gold-bright);font-size:0.92rem;">${formatEUR(item.price * item.qty)}</strong>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+                <div class="qty-control">
+                  <button onclick="updateQty('${item.key}', -1)">−</button>
+                  <span>${item.qty}</span>
+                  <button onclick="updateQty('${item.key}', 1)">+</button>
+                </div>
+                <button style="font-size:0.74rem;color:var(--text-muted);" onclick="updateQty('${item.key}', -${item.qty})">Remover</button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const discount = promoApplied ? subtotal * 0.15 : 0;
+      const shipping = subtotal === 0 || subtotal >= freeShipThreshold ? 0 : 4.9;
+      const total = Math.max(0, subtotal - discount + shipping);
+
+      document.getElementById('cartSubtotal').textContent = formatEUR(subtotal);
+      document.getElementById('discountRow').style.display = promoApplied && subtotal > 0 ? 'flex' : 'none';
+      document.getElementById('cartDiscount').textContent = '-' + formatEUR(discount);
+      document.getElementById('cartShipping').textContent = shipping === 0 ? 'Grátis' : formatEUR(shipping);
+      document.getElementById('cartTotal').textContent = formatEUR(total);
+
+      lucide.createIcons();
+    }
+
+    function applyPromo() {
+      const code = document.getElementById('promoInput').value.trim().toUpperCase();
+      if (code === 'LUMIERE15') {
+        promoApplied = true;
+        renderCart();
+        showToast('Código LUMIERE15 aplicado (-15%)!');
+      } else {
+        showToast('Código inválido. Experimenta LUMIERE15');
+      }
+    }
+
+    function renderWishlist() {
+      const wrap = document.getElementById('wishlistItems');
+      if (wishlist.length === 0) {
+        wrap.innerHTML = `
+          <div style="text-align:center;padding:56px 16px;color:var(--text-secondary);">
+            <i data-lucide="heart" style="width:40px;height:40px;color:var(--rose);opacity:0.65;margin:0 auto 14px;"></i>
+            <p class="serif" style="font-size:1.5rem;color:var(--text-primary);margin-bottom:6px;">Ainda sem favoritos</p>
+            <p style="font-size:0.84rem;">Toca no coração de qualquer produto para o guardar aqui.</p>
+          </div>
+        `;
+      } else {
+        wrap.innerHTML = wishlist.map(id => {
+          const p = PRODUCTS.find(x => x.id === id);
+          if (!p) return '';
+          return `
+            <div class="cart-item">
+              <img src="${p.image}" alt="${p.name}" />
+              <div style="display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                  <div class="serif" style="font-size:1.2rem;">${p.name}</div>
+                  <div style="font-size:0.78rem;color:var(--gold-bright);font-weight:600;">${formatEUR(getProductPrice(p))}</div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:8px;">
+                  <button class="btn btn-primary btn-sm" style="padding:7px 14px;font-size:0.74rem;" onclick="addToCart('${p.id}')">Mover para Cesto</button>
+                  <button class="btn btn-glass btn-sm" style="padding:7px 12px;font-size:0.74rem;" onclick="toggleWishlist('${p.id}')">Remover</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+      lucide.createIcons();
+    }
+
+    function openCart() {
+      closeAllOverlays();
+      renderCart();
+      document.getElementById('backdrop').classList.add('open');
+      document.getElementById('cartDrawer').classList.add('open');
+    }
+
+    function openWishlist() {
+      closeAllOverlays();
+      renderWishlist();
+      document.getElementById('backdrop').classList.add('open');
+      document.getElementById('wishlistDrawer').classList.add('open');
+    }
+
+    function openQuickView(productId) {
+      const p = PRODUCTS.find(x => x.id === productId);
+      if (!p) return;
+      closeAllOverlays();
+
+      document.getElementById('quickViewContent').innerHTML = `
+        <button class="icon-btn" style="position:absolute;top:18px;right:18px;z-index:5;" onclick="closeAllOverlays()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </button>
+        <div class="quickview-grid">
+          <div style="border-radius:20px;overflow:hidden;aspect-ratio:4/4.4;border:1px solid rgba(255,240,224,0.2);">
+            <img src="${p.image}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;" />
+          </div>
+          <div>
+            <span class="eyebrow"><span class="dot"></span> ${p.badge} · ${getProductVolume(p)}</span>
+            <h2 class="serif" style="font-size:2.4rem;line-height:1.05;margin:14px 0 6px;">${p.name}</h2>
+            <div style="color:var(--gold-bright);font-size:0.86rem;margin-bottom:14px;">★★★★★ ${p.rating.toFixed(1)} (${p.reviews} avaliações)</div>
+            <p style="color:var(--text-secondary);font-size:0.92rem;line-height:1.7;margin-bottom:18px;">${p.description}</p>
+            <div style="margin-bottom:16px;">
+              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--gold);margin-bottom:8px;">Ativos Chave</div>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;">
+                ${p.actives.map(a => `<span style="padding:5px 12px;border-radius:999px;font-size:0.76rem;background:rgba(255,248,240,0.07);border:1px solid rgba(255,238,224,0.16);">${a}</span>`).join('')}
+              </div>
+            </div>
+            <p style="font-size:0.82rem;color:var(--text-secondary);padding:12px 14px;border-radius:14px;background:rgba(231,194,142,0.07);border:1px solid rgba(231,194,142,0.2);margin-bottom:22px;">
+              <strong style="color:var(--gold-bright);">Ritual:</strong> ${p.ritual}
+            </p>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;">
+              <span class="serif" style="font-size:2rem;color:var(--gold-bright);font-weight:600;">${formatEUR(getProductPrice(p))}</span>
+              <button class="btn btn-primary" onclick="addToCart('${p.id}'); closeAllOverlays(); openCart();">
+                <i data-lucide="shopping-bag" style="width:16px;height:16px;"></i> Adicionar ao Cesto
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('backdrop').classList.add('open');
+      document.getElementById('quickViewModal').classList.add('open');
+      lucide.createIcons();
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        showToast('Adiciona primeiro um produto ao teu cesto.');
+        return;
+      }
+      const total = document.getElementById('cartTotal').textContent;
+      closeAllOverlays();
+      document.getElementById('checkoutContent').innerHTML = `
+        <button class="icon-btn" style="position:absolute;top:18px;right:18px;" onclick="closeAllOverlays()">
+          <i data-lucide="x" style="width:18px;height:18px;"></i>
+        </button>
+        <span class="eyebrow"><span class="dot"></span> Checkout Expresso</span>
+        <h3 class="serif" style="font-size:2.1rem;margin:12px 0 6px;">Finalizar Encomenda</h3>
+        <p style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:20px;">Total a pagar: <strong style="color:var(--gold-bright);">${total}</strong> · Envio 24h com 2 amostras de oferta.</p>
+        <form onsubmit="completeOrder(event)" style="display:grid;gap:12px;">
+          <input type="text" class="glass-input" required placeholder="Nome Completo" />
+          <input type="email" class="glass-input" required placeholder="Email para confirmação" />
+          <input type="text" class="glass-input" required placeholder="Morada de Entrega (Lisboa, Porto...)" />
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;" id="payMethodRow">
+            <button type="button" class="filter-pill active" style="padding:12px;" onclick="selectPayMethod(this)">MB WAY</button>
+            <button type="button" class="filter-pill" style="padding:12px;" onclick="selectPayMethod(this)">Cartão / Apple Pay</button>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;margin-top:8px;">
+            Confirmar Pagamento (${total})
+          </button>
+        </form>
+      `;
+      document.getElementById('backdrop').classList.add('open');
+      document.getElementById('checkoutModal').classList.add('open');
+      lucide.createIcons();
+    }
+
+    function selectPayMethod(btn) {
+      document.querySelectorAll('#payMethodRow .filter-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function completeOrder(e) {
+      e.preventDefault();
+      const orderRef = 'LM-' + Math.floor(100000 + Math.random() * 900000);
+      cart = [];
+      promoApplied = false;
+      saveState();
+      updateBadges();
+      renderCart();
+
+      document.getElementById('checkoutContent').innerHTML = `
+        <div style="text-align:center;padding:18px 8px;">
+          <div style="width:66px;height:66px;border-radius:50%;margin:0 auto 18px;background:linear-gradient(135deg,rgba(246,221,182,0.28),rgba(223,156,146,0.2));border:1px solid var(--gold-bright);display:grid;place-items:center;">
+            <i data-lucide="check" style="width:30px;height:30px;color:var(--gold-bright);"></i>
+          </div>
+          <span class="eyebrow"><span class="dot"></span> Encomenda #${orderRef}</span>
+          <h3 class="serif" style="font-size:2.3rem;margin:14px 0 8px;">Obrigada pela Tua Escolha</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:24px;">
+            O teu ritual Lumière está a ser preparado no nosso atelier de Lisboa com embalagem de cristal e 2 amostras surpresa.
+          </p>
+          <button class="btn btn-primary" onclick="closeAllOverlays(); navigateTo('inicio');">Voltar à Boutique</button>
+        </div>
+      `;
+      lucide.createIcons();
+
+      if (window.confetti) {
+        confetti({
+          particleCount: 90,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#f6ddb6', '#e7c28e', '#df9c92', '#ffffff']
+        });
+      }
+    }
+
+    function closeAllOverlays() {
+      document.getElementById('backdrop').classList.remove('open');
+      document.getElementById('cartDrawer').classList.remove('open');
+      document.getElementById('wishlistDrawer').classList.remove('open');
+      document.getElementById('quickViewModal').classList.remove('open');
+      document.getElementById('checkoutModal').classList.remove('open');
+    }
+
+    function showToast(msg) {
+      const stack = document.getElementById('toastStack');
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.innerHTML = `<i data-lucide="sparkles" style="width:15px;height:15px;color:#f6ddb6;"></i><span>${msg}</span>`;
+      stack.appendChild(t);
+      lucide.createIcons();
+      setTimeout(() => {
+        t.style.opacity = '0';
+        t.style.transform = 'translateY(10px)';
+        t.style.transition = 'all 0.3s ease';
+        setTimeout(() => t.remove(), 320);
+      }, 2800);
+    }
+
+    /* ------------------------------------------------------------------------
+       LIVE SPECULAR GLASS TRACKING & COUNTDOWN
+       ------------------------------------------------------------------------ */
+    document.addEventListener('pointermove', (e) => {
+      const card = e.target.closest('.specular');
+      if (!card) return;
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+
+    function startCountdown() {
+      let secs = 4 * 3600 + 18 * 60 + 52;
+      setInterval(() => {
+        secs = secs > 0 ? secs - 1 : 4 * 3600;
+        const h = String(Math.floor(secs / 3600)).padStart(2, '0');
+        const m = String(Math.floor((secs % 3600) / 60)).padStart(2, '0');
+        const s = String(secs % 60).padStart(2, '0');
+        const el = document.getElementById('countdownTimer');
+        if (el) el.textContent = `${h}h ${m}m ${s}s`;
+      }, 1000);
+    }
+
+    /* ------------------------------------------------------------------------
+       BOOTSTRAP ON LOAD
+       ------------------------------------------------------------------------ */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAllProductGrids();
+      selectAlchemy(0);
+      selectScent(0);
+      selectQuizGoal('glow');
+      updateBadges();
+      renderCart();
+      startCountdown();
+
+      // Hash routing support (#inicio, #skincare, #perfumaria, #kits)
+      const initialHash = (location.hash || '#inicio').replace('#', '');
+      navigateTo(initialHash, false);
+
+      window.addEventListener('hashchange', () => {
+        const page = (location.hash || '#inicio').replace('#', '');
+        if (page !== currentPage) navigateTo(page, false);
+      });
+
+      // ESC closes overlays
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeAllOverlays();
+      });
+
+      // Subtle hero stagger on first load
+      if (window.gsap) {
+        gsap.from('.hero-copy > *', {
+          opacity: 0,
+          y: 22,
+          duration: 0.75,
+          stagger: 0.09,
+          ease: 'power3.out'
+        });
+      }
+
+      lucide.createIcons();
+    });
+  </script>
+</body>
+</html>
